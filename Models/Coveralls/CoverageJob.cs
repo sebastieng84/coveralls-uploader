@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace coveralls_uploader.Models.Coveralls
 {
-    public class Job
+    public class CoverageJob
     {
         [JsonProperty("repo_token")]
         public string RepositoryToken { get; set; }
@@ -18,7 +18,7 @@ namespace coveralls_uploader.Models.Coveralls
         [JsonProperty("service_pull_request")]
         public string ServicePullRequest { get; set; }
         [JsonProperty("source_files")]
-        public IList<SourceFile> SourceFiles {get; set;}
+        public IList<SourceFileCoverage> SourceFiles {get; set;}
         public bool Parallel { get; set; }
         [JsonProperty("flag_name")]
         public string FlagName { get; set; }
@@ -29,7 +29,7 @@ namespace coveralls_uploader.Models.Coveralls
         [JsonProperty("git")]
         public GitInformation GitInformation { get; set; }
         
-        public Job(
+        public CoverageJob(
             string repositoryToken,
             string serviceName, 
             string serviceNumber, 
@@ -38,7 +38,7 @@ namespace coveralls_uploader.Models.Coveralls
             bool parallel, 
             string flagName, 
             string commitSha,
-            IList<SourceFile> sourceFiles, 
+            IList<SourceFileCoverage> sourceFiles, 
             DateTime runAt, 
             GitInformation gitInformation)
         {

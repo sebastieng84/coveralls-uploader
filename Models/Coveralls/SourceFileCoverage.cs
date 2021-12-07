@@ -2,7 +2,7 @@
 
 namespace coveralls_uploader.Models.Coveralls
 {
-    public class SourceFile
+    public class SourceFileCoverage
     {
         public string Name { get; set; }
         public string Digest { get; set; }
@@ -12,7 +12,7 @@ namespace coveralls_uploader.Models.Coveralls
         public int?[] BranchCoverage { get; set; }
         public string Source { get; set; }
         
-        public SourceFile(
+        public SourceFileCoverage(
             string name, 
             string digest, 
             int?[] lineCoverage, 
