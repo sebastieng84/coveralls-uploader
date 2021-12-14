@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "coveralls-uploader", "coveralls-uploader.csproj", "{B045B989-7801-4ED9-AA29-579A4D5CE721}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "coveralls-uploader", "src\coveralls-uploader.csproj", "{D165E2A3-00D1-4286-B12C-14F887CA18CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "tests\Tests\Tests.csproj", "{4D53B0B4-C410-4859-B9CD-DD1923C33C47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +10,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B045B989-7801-4ED9-AA29-579A4D5CE721}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B045B989-7801-4ED9-AA29-579A4D5CE721}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B045B989-7801-4ED9-AA29-579A4D5CE721}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B045B989-7801-4ED9-AA29-579A4D5CE721}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D165E2A3-00D1-4286-B12C-14F887CA18CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D165E2A3-00D1-4286-B12C-14F887CA18CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D165E2A3-00D1-4286-B12C-14F887CA18CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D165E2A3-00D1-4286-B12C-14F887CA18CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D53B0B4-C410-4859-B9CD-DD1923C33C47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D53B0B4-C410-4859-B9CD-DD1923C33C47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D53B0B4-C410-4859-B9CD-DD1923C33C47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D53B0B4-C410-4859-B9CD-DD1923C33C47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
