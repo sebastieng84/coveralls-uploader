@@ -9,25 +9,22 @@ namespace coveralls_uploader.Models.Coveralls
     {
         [JsonProperty("repo_token")]
         public string RepositoryToken { get; set; }
-        [JsonProperty("service_name")]
         public string ServiceName { get; set; }
-        [JsonProperty("service_number")]
         public string ServiceNumber { get; set; }
-        [JsonProperty("service_job_id")]
         public string ServiceJobId { get; set; }
-        [JsonProperty("service_pull_request")]
         public string ServicePullRequest { get; set; }
-        [JsonProperty("source_files")]
         public IList<SourceFile> SourceFiles {get; set;}
+        [JsonIgnore]
         public bool Parallel { get; set; }
-        [JsonProperty("flag_name")]
         public string FlagName { get; set; }
-        [JsonProperty("commit_sha")]
         public string CommitSha { get; set; }
-        [JsonProperty("run_at")]
-        public DateTime RunAt { get; set; }
+        public string RunAt { get; set; }
         [JsonProperty("git")]
         public GitInformation GitInformation { get; set; }
+
+        public Job()
+        {
+        }
         
         public Job(
             string repositoryToken,
@@ -51,7 +48,7 @@ namespace coveralls_uploader.Models.Coveralls
             Parallel = parallel;
             FlagName = flagName;
             CommitSha = commitSha;
-            RunAt = runAt;
+           // RunAt = runAt;
             GitInformation = gitInformation;
         }
     }

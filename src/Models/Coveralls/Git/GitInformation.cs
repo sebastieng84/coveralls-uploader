@@ -8,10 +8,5 @@ namespace coveralls_uploader.Models.Coveralls.Git
         public string Branch { get; set; }
         public IEnumerable<Remote> Remotes { get; set; } = new List<Remote>();
         
-        public GitInformation(Head head, string branch)
-        {
-            Head = head;
-            Branch = branch;
-        }
     }
 }

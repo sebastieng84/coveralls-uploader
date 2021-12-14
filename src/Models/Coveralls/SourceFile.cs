@@ -5,18 +5,20 @@ namespace coveralls_uploader.Models.Coveralls
     public class SourceFile
     {
         public string Name { get; set; }
+        [JsonProperty("source_digest")]
         public string Digest { get; set; }
         [JsonProperty("coverage")]
         public int?[] LineCoverage { get; set; }
-        [JsonProperty("branches")]
-        public int?[] BranchCoverage { get; set; }
+        [JsonIgnore]
+        public int[] BranchCoverage { get; set; }
+        [JsonIgnore]
         public string Source { get; set; }
         
         public SourceFile(
             string name, 
             string digest, 
             int?[] lineCoverage, 
-            int?[] branchCoverage, 
+            int[] branchCoverage, 
             string source)
         {
             Name = name;
