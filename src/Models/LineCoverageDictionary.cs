@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace coveralls_uploader.Models
@@ -7,6 +8,11 @@ namespace coveralls_uploader.Models
     {
         public int?[] ToArray()
         {
+            if (Count == 0)
+            {
+                return Array.Empty<int?>();
+            }
+            
             var maxValue = Keys.Max(key => key);
             
             var lineCoverageArray = new int?[maxValue];

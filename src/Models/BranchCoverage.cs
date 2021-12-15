@@ -6,7 +6,10 @@
         public int BlockNumber { get; set; }
         public int BranchNumber { get; set; }
         public int HitCount { get; set; }
-        
+
+        public BranchCoverage()
+        {
+        }
         public BranchCoverage(
             int lineNumber, 
             int blockNumber, 
