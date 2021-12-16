@@ -1,0 +1,13 @@
+name: dotnet build
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
+    - run: dotnet build
+    - run: dotnet test    
+        
