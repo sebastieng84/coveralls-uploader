@@ -1,0 +1,19 @@
+<CoverageParams>
+    <Output>coverage/result.xml</Output>
+    <ReportType>DetailedXML</ReportType>
+    <HideAutoProperties>True</HideAutoProperties>
+    <ExcludeFileMasks>
+        <Mask>/**/Program.cs</Mask>
+    </ExcludeFileMasks>
+    <Filters>
+        <ExcludeFilters>
+            <FilterEntry>
+                <ModuleMask>*Tests*</ModuleMask>
+            </FilterEntry>
+        </ExcludeFilters>
+    </Filters>
+    <AttributeFilters>
+        <AttributeFilterEntry>Attribute class mask</AttributeFilterEntry>
+        <AttributeFilterEntry>System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute</AttributeFilterEntry>
+    </AttributeFilters>
+</CoverageParams>
