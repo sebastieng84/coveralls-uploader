@@ -1,5 +1,5 @@
 <CoverageParams>
-    <Output>coverage/result.xml</Output>
+    <Output>coverage/code-coverage.xml</Output>
     <ReportType>DetailedXML</ReportType>
     <HideAutoProperties>True</HideAutoProperties>
     <ExcludeFileMasks>

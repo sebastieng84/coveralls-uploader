@@ -9,10 +9,14 @@ jobs:
       with:
         dotnet-version: '6.0.x'
     - run: dotnet build
-    - run: dotnet test
     - name: Setup dotCover
       run: dotnet tool install JetBrains.dotCover.GlobalTool -g
     - name: Run dotCover coverage
       run: dotnet dotcover test --dcXML="dotcover.xml"
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v2
+      with:
+        name: code-coverage-report
+        path: coverage/code-coverage.xml
       
         
