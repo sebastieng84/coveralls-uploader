@@ -1,5 +1,5 @@
 name: dotnet build
-on: [push, pull_request]
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,5 +9,10 @@ jobs:
       with:
         dotnet-version: '6.0.x'
     - run: dotnet build
-    - run: dotnet test    
+    - run: dotnet test
+    - name: Setup dotCover
+      run: dotnet tool install JetBrains.dotCover.GlobalTool -g
+    - name: Run dotCover coverage
+      run: dotnet dotcover test --dcXML="dotcover.xml"
+      
         
