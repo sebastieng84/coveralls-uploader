@@ -1,34 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using coveralls_uploader.Models.Coveralls;
 using coveralls_uploader.Models.Coveralls.Git;
 using coveralls_uploader.Parsers;
-using Microsoft.Extensions.Hosting;
 
 namespace coveralls_uploader.Services
 {
-    public class MainHostedService : IHostedService
+    public class MainService 
     {
         private readonly SourceFileService _sourceFileService;
         private readonly CoverallsService _coverallsService;
         private readonly IParser _parser;
-        private readonly IHostApplicationLifetime _hostApplicationLifetime;
-        
-        public MainHostedService(
+
+        public MainService(
             SourceFileService sourceFileService,
             CoverallsService coverallsService,
-            IParser parser,
-            IHostApplicationLifetime hostApplicationLifetime)
+            IParser parser)
         {
             _sourceFileService = sourceFileService;
             _coverallsService = coverallsService;
             _parser = parser;
-            _hostApplicationLifetime = hostApplicationLifetime;
         }
         
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public async Task RunAsync()
         {
             var fileCoverages = _parser.Parse(@"C:\Users\sebas\Downloads\lcov.info");
 
@@ -38,37 +33,30 @@ namespace coveralls_uploader.Services
             {
                 RepositoryToken = "DQyGHUKIznRy7m0DLDpiduTVFSeA9NQZE",
                 SourceFiles = sourceFiles.ToList(),
-                CommitSha = "41b12011f0b0274652287c694c607c056ee177b0",
+                CommitSha = "6b762439fc709702f2c15c0936a7293092d9e28b",
                 ServiceName = "jenkins",
-                ServiceNumber = "1377",
-                RunAt = "2020-11-25 10:45:00 -0800",
+                ServiceNumber = "16",
+                RunAt = "2020-12-15 10:45:00 -0800",
                 GitInformation = new GitInformation()
                 {
                     Head = new Head
                     {
-                        Id = "41b12011f0b0274652287c694c607c056ee177b0",
+                        Id = "6b762439fc709702f2c15c0936a7293092d9e28b",
                         AuthorName = "Sébastien Girard",
                         AuthorEmail = "sebastien.girard@amilia.com",
                         CommitterName = "Sébastien Girard",
                         CommitterEmail = "sebastien.girard@amilia.com",
-                        Message = "Help"
+                        Message = "Fix upload-artifact path"
                     },
-                    Branch = "origin/dev",
+                    Branch = "origin/master",
                     Remotes = new List<Remote>
                     {
-                        new("origin", "git@github.com:AmiliaApp/Amilia.git")
+                        new("origin", "https://github.com/sebastieng84/coveralls-uploader.git")
                     }
                 }
             };
 
             await _coverallsService.UploadAsync(job);
-            
-            _hostApplicationLifetime.StopApplication();
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
         }
     }
 }
