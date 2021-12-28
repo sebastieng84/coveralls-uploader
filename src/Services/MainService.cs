@@ -1,34 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using coveralls_uploader.Models.Coveralls;
 using coveralls_uploader.Models.Coveralls.Git;
 using coveralls_uploader.Parsers;
-using Microsoft.Extensions.Hosting;
 
 namespace coveralls_uploader.Services
 {
-    public class MainHostedService : IHostedService
+    public class MainService 
     {
         private readonly SourceFileService _sourceFileService;
         private readonly CoverallsService _coverallsService;
         private readonly IParser _parser;
-        private readonly IHostApplicationLifetime _hostApplicationLifetime;
-        
-        public MainHostedService(
+
+        public MainService(
             SourceFileService sourceFileService,
             CoverallsService coverallsService,
-            IParser parser,
-            IHostApplicationLifetime hostApplicationLifetime)
+            IParser parser)
         {
             _sourceFileService = sourceFileService;
             _coverallsService = coverallsService;
             _parser = parser;
-            _hostApplicationLifetime = hostApplicationLifetime;
         }
         
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public async Task RunAsync()
         {
             var fileCoverages = _parser.Parse(@"C:\Users\sebas\Downloads\lcov.info");
 
@@ -62,13 +57,6 @@ namespace coveralls_uploader.Services
             };
 
             await _coverallsService.UploadAsync(job);
-            
-            _hostApplicationLifetime.StopApplication();
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
         }
     }
 }
