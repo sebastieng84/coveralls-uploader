@@ -1,5 +1,8 @@
-name: dotnet build
-on: [ push ]
+name: Upload code coverage
+on:
+  push:
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
