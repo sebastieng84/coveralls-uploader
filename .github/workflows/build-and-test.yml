@@ -11,6 +11,8 @@ jobs:
       - run: dotnet build
       - name: Setup dotCover
         run: dotnet tool install JetBrains.dotCover.GlobalTool -g
+      - name: Setup coveralls-uploader
+        run: dotnet tool install --global coveralls-uploader --version 0.1.0
       - name: Run dotCover coverage
         run: dotnet dotcover test --dcXML="dotcover.xml"
       - name: Conver to lcov format
@@ -24,32 +26,7 @@ jobs:
         with:
           name: code-coverage-report
           path: coverage/lcov.info
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJSON(job) }}
-        run: echo "$JOB_CONTEXT"
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJSON(steps) }}
-        run: echo "$STEPS_CONTEXT"
-      - name: Dump runner context
-        env:
-          RUNNER_CONTEXT: ${{ toJSON(runner) }}
-        run: echo "$RUNNER_CONTEXT"
-      - name: Dump strategy context
-        env:
-          STRATEGY_CONTEXT: ${{ toJSON(strategy) }}
-        run: echo "$STRATEGY_CONTEXT"
-      - name: Dump matrix context
-        env:
-          MATRIX_CONTEXT: ${{ toJSON(matrix) }}
-        run: echo "$MATRIX_CONTEXT"
       - name: Expose git commit data
         uses: rlespinasse/git-commit-data-action@v1.x
-      - run: env
-
-        
+      - name: Upload data to coveralls.io
+        run: dotnet coveralls-uploader -i coverage/lcov.info -t DQyGHUKIznRy7m0DLDpiduTVFSeA9NQZE
