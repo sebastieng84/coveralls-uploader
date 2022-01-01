@@ -1,58 +1,67 @@
-﻿using System;
-using System.IO.Abstractions;
+﻿using System.IO.Abstractions;
 using System.Text;
-using System.Threading.Tasks;
 using coveralls_uploader.Models;
 using coveralls_uploader.Models.Coveralls;
+using Microsoft.Extensions.Logging;
 
-namespace coveralls_uploader.Services
+namespace coveralls_uploader.Services;
+
+public class SourceFileService
 {
-    public class SourceFileService
-    {
-        private readonly IFileSystem _fileSystem;
+    private readonly IFileSystem _fileSystem;
+    private readonly ILogger _logger;
         
-        public SourceFileService(IFileSystem fileSystem)
-        {
-            _fileSystem = fileSystem;
-        }
+    public SourceFileService(
+        IFileSystem fileSystem, 
+        ILogger logger)
+    {
+        _fileSystem = fileSystem;
+        _logger = logger;
+    }
 
-        public async Task<SourceFile> CreateAsync(FileCoverage fileCoverage)
-        {
-            string fileContent = null;
-            string md5Hash = null;
+    public async Task<IList<SourceFile>> CreateManyAsync(IList<FileCoverage> fileCoverages, CommandOptions commandOptions)
+    {
+        return await Task.WhenAll(fileCoverages.Select(async file => await CreateAsync(file, commandOptions)));
+    }
+    
+    private async Task<SourceFile> CreateAsync(FileCoverage fileCoverage, CommandOptions commandOptions)
+    {
+        string fileContent = null;
+        string md5Hash = null;
             
-            var filePath = GetRelativeFilePath(fileCoverage.FilePath);
-            try
-            {
-                fileContent = await _fileSystem.File.ReadAllTextAsync(fileCoverage.FilePath, Encoding.UTF8);
-                md5Hash = GetMd5Digest(fileCoverage.FilePath);
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("lol");
-            }
-
-            return new SourceFile(
-                filePath,
-                md5Hash,
-                fileCoverage.CoverageByLine.ToArray(),
-                fileCoverage.BranchCoverages.ToArray(),
-                fileContent);
+        var filePath = GetRelativeFilePath(fileCoverage.FilePath);
+        try
+        {
+            fileContent = commandOptions.Source
+                ? await _fileSystem.File.ReadAllTextAsync(fileCoverage.FilePath, Encoding.UTF8)
+                : null;
+            md5Hash = GetMd5Digest(fileCoverage.FilePath);
+        }
+        catch (Exception)
+        {
+            _logger.LogWarning("File not found: {filePath}", filePath);
         }
 
-        private string GetMd5Digest(string filePath)
-        {
-            using var md5 = System.Security.Cryptography.MD5.Create();
-            var hashBytes = md5.ComputeHash(_fileSystem.File.OpenRead(filePath));
+        return new SourceFile(
+            filePath,
+            md5Hash,
+            fileCoverage.CoverageByLine.ToArray(),
+            fileCoverage.BranchCoverages.ToArray(),
+            fileContent);
+    }
+
+    private string GetMd5Digest(string filePath)
+    {
+        using var md5 = System.Security.Cryptography.MD5.Create();
+        var hashBytes = md5.ComputeHash(_fileSystem.File.OpenRead(filePath));
             
-            return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
-        }
+        return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+    }
 
-        private string GetRelativeFilePath(string filePath)
-        {
-            var currentDirectory = _fileSystem.Directory.GetCurrentDirectory();
+    private string GetRelativeFilePath(string filePath)
+    {
+        var currentDirectory = _fileSystem.Directory.GetCurrentDirectory();
 
-            return _fileSystem.Path.GetRelativePath(currentDirectory, filePath);
-        }
+        return _fileSystem.Path.GetRelativePath(currentDirectory, filePath);
     }
 }
