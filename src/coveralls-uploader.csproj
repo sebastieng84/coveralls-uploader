@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+    <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -6,6 +6,9 @@
         <RootNamespace>coveralls_uploader</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
+        <PackAsTool>true</PackAsTool>
+        <PackageOutputPath>./nupkg</PackageOutputPath>
+
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,18 +18,4 @@
       <PackageReference Include="System.CommandLine.Hosting" Version="0.4.0-alpha.21617.1" />
       <PackageReference Include="System.IO.Abstractions" Version="14.0.13" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="SerilogLogger\SqlServerSink.cs" />
-      <Compile Remove="SerilogLogger\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Remove="SerilogLogger\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="SerilogLogger\**" />
-    </ItemGroup>
-
 </Project>

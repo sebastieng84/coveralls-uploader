@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using coveralls_uploader.Models.Coveralls.Git;
+﻿using coveralls_uploader.Models.Coveralls.Git;
 using Newtonsoft.Json;
 
 namespace coveralls_uploader.Models.Coveralls

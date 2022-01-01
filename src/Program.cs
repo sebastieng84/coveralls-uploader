@@ -6,26 +6,35 @@ using coveralls_uploader;
 using coveralls_uploader.Parsers;
 using coveralls_uploader.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-var builder = new CommandLineBuilder(new UploadCommand());
-var parser = builder
-    .UseDefaults()
-    .UseHost(host =>
-    {
-        host.ConfigureServices((_, services) =>
+return await new CommandLineBuilder(new UploadCommand())
+    .UseHost(_ => Host.CreateDefaultBuilder(),
+        host =>
         {
-            services
-                .AddTransient<MainService>()
-                .AddSingleton<IFileSystem, FileSystem>()
-                .AddSingleton<SourceFileService>()
-                .AddSingleton<IParser, LcovParser>()
-                .AddSingleton<CoverallsService>();
-        });
-
-        host.UseCommandHandler<UploadCommand, UploadCommandHandler>();
-    })
-    .Build();
-
-return await parser.InvokeAsync(args);
+            host.ConfigureServices(services =>
+            {
+                services
+                    .AddSingleton<MainService>()
+                    .AddSingleton<IFileSystem, FileSystem>()
+                    .AddSingleton<IParser, LcovParser>()
+                    .AddSingleton<IJobDataFetcher, GitHubActionsDataFetcher>()
+                    .AddSingleton<CoverallsService>()
+                    .AddSingleton<SourceFileService>()
+                    .AddTransient<ILogger, Logger<UploadCommand>>();
+            });
+            host.ConfigureLogging((_, loggingBuilder) =>
+            {
+                loggingBuilder
+                    .ClearProviders()
+                    .AddConsole()
+                    .AddFilter("Microsoft", LogLevel.None)
+                    .SetMinimumLevel(LogLevel.Trace);
+            });
+        })
+    .UseDefaults()
+    .Build()
+    .InvokeAsync(args);
     
     

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using coveralls_uploader.Models;
+using Microsoft.Extensions.Logging;
 
 namespace coveralls_uploader.Parsers
 {
@@ -16,13 +13,13 @@ namespace coveralls_uploader.Parsers
         
         private readonly Dictionary<string, FileCoverage> _sourceFileCoverageByFile = new();
         
-        public IList<FileCoverage> Parse(string filePath)
+        public IList<FileCoverage> Parse(FileInfo fileInfo)
         {
-            ValidateFileExtension(filePath);
+            ValidateFileExtension(fileInfo.FullName);
             
             FileCoverage currentFileCoverage = null;
             
-            foreach (var line in File.ReadLines(filePath))
+            foreach (var line in File.ReadLines(fileInfo.FullName))
             {
                 if (Regex.Match(line, SourceFilePattern) is var sourceFileMatch && sourceFileMatch.Success)
                 {
@@ -86,7 +83,6 @@ namespace coveralls_uploader.Parsers
 
         private static void ValidateFileExtension(string filePath)
         {
-            // TODO: Validate filepath
             if (Path.GetExtension(filePath) != LcovExtension)
             {
                 throw new ArgumentOutOfRangeException(

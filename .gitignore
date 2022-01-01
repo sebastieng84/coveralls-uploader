@@ -6,3 +6,4 @@ riderModule.iml
 *DotSettings*
 .idea/*
 *.bak
+*.DS_Store
