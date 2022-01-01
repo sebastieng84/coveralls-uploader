@@ -29,4 +29,4 @@ jobs:
       - name: Expose git commit data
         uses: rlespinasse/git-commit-data-action@v1.x
       - name: Upload data to coveralls.io
-        run: dotnet coveralls-uploader -i coverage/lcov.info -t DQyGHUKIznRy7m0DLDpiduTVFSeA9NQZE
+        run: coveralls-uploader -i coverage/lcov.info -t DQyGHUKIznRy7m0DLDpiduTVFSeA9NQZE
