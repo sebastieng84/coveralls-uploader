@@ -6,7 +6,7 @@ namespace coveralls_uploader.Services;
 
 public class GitHubActionsDataFetcher : IJobDataFetcher
 {
-    private const string GITHUB_ACTIONS_SERVICE_NAME = "github-actions";
+    private const string GithubActionsServiceName = "github";
     
     public GitHubActionsDataFetcher()
     {
@@ -16,12 +16,11 @@ public class GitHubActionsDataFetcher : IJobDataFetcher
     {
         return new Job
         {
-            RepositoryToken =  commandOptions.Token,
-            ServiceName = GITHUB_ACTIONS_SERVICE_NAME,
-            ServiceNumber = Environment.GetEnvironmentVariable("GITHUB_ACTION"),
-            ServiceJobId = Environment.GetEnvironmentVariable("GITHUB_JOB"),
+            RepositoryToken =  Environment.GetEnvironmentVariable("GITHUB_TOKEN"),
+            ServiceName = GithubActionsServiceName,
+            ServiceNumber = Environment.GetEnvironmentVariable("GITHUB_RUN_NUMBER"),
+            ServiceJobId = Environment.GetEnvironmentVariable("GITHUB_RUN_ID"),
             CommitSha = Environment.GetEnvironmentVariable("GITHUB_SHA"),
-            RunAt = "2021-12-30 10:45:00 -0800",
             GitInformation = new GitInformation
             {
                 Head = new Head

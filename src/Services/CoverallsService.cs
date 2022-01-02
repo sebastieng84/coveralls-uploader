@@ -17,6 +17,7 @@ public class CoverallsService
     {
         _logger = logger;
     }
+    
     public async Task UploadAsync(Job job)
     {
         var contractResolver = new DefaultContractResolver

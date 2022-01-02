@@ -8,6 +8,9 @@
         <Nullable>disable</Nullable>
         <PackAsTool>true</PackAsTool>
         <PackageOutputPath>./nupkg</PackageOutputPath>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageVersion>0.1.2</PackageVersion>
+        <Authors>sebastieng84</Authors>
 
     </PropertyGroup>
 

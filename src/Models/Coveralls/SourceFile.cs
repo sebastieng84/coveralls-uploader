@@ -11,7 +11,6 @@ namespace coveralls_uploader.Models.Coveralls
         public int?[] LineCoverage { get; set; }
         [JsonIgnore]
         public int[] BranchCoverage { get; set; }
-        [JsonIgnore]
         public string Source { get; set; }
         
         public SourceFile(
