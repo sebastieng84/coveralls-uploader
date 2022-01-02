@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+env:
+  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,7 +17,7 @@ jobs:
       - name: Setup dotCover
         run: dotnet tool install JetBrains.dotCover.GlobalTool -g
       - name: Setup coveralls-uploader
-        run: dotnet tool install --global coveralls-uploader --version 0.1.0
+        run: dotnet tool install --global coveralls-uploader --version 0.1.2
       - name: Run dotCover coverage
         run: dotnet dotcover test --dcXML="dotcover.xml"
       - name: Conver to lcov format
@@ -32,4 +34,4 @@ jobs:
       - name: Expose git commit data
         uses: rlespinasse/git-commit-data-action@v1.x
       - name: Upload data to coveralls.io
-        run: coveralls-uploader -i coverage/lcov.info -t DQyGHUKIznRy7m0DLDpiduTVFSeA9NQZE
+        run: coveralls-uploader -i coverage/lcov.info
