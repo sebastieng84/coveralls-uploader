@@ -2,7 +2,7 @@ name: Upload code coverage
 on:
   push:
     branches:
-      - main
+      - master
 env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 jobs:
