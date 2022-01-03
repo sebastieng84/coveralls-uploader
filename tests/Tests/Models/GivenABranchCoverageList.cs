@@ -8,20 +8,20 @@ namespace Tests.Models
         [Test]
         public void WhenIToArray_WithAnEmptyList_ThenItReturnsAnEmptyArray()
         {
-            // Given
+            // Arrange
             var branchCoverageList = new BranchCoverageList();
 
-            // When
+            // Act
             var array = branchCoverageList.ToArray();
 
-            // Then
+            // Assert
             Assert.IsEmpty(array);
         }
         
         [Test]
         public void WhenIToArray_ThenItReturnsAnArrayWithTheFieldsInTheProperOrder()
         {
-            // Given
+            // Arrange
             const int lineNumber = 1;
             const int blockNumber = 2;
             const int branchNumber = 3;
@@ -35,10 +35,10 @@ namespace Tests.Models
                     hitCount)
             };
 
-            // When
+            // Act
             var array = branchCoverageList.ToArray();
 
-            // Then
+            // Assert
             Assert.AreEqual(lineNumber, array[0]);
             Assert.AreEqual(blockNumber, array[1]);
             Assert.AreEqual(branchNumber, array[2]);
@@ -48,18 +48,17 @@ namespace Tests.Models
         [Test]
         public void WhenIToArray_ThenItReturnsAnArrayWithTheProperSize()
         {
-            // Given
-
+            // Arrange
             var branchCoverageList = new BranchCoverageList
             {
                 new(),
                 new()
             };
 
-            // When
+            // Act
             var array = branchCoverageList.ToArray();
 
-            // Then
+            // Assert
             Assert.AreEqual(branchCoverageList.Count * 4, array.Length);
         }
     }

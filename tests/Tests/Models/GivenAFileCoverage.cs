@@ -8,7 +8,7 @@ namespace Tests.Models
         [Test]
         public void WhenIToArray_ItReturnsAnArrayUpToTheMaxKey()
         {
-            // Given
+            // Arrange
             const int maxKey = 100;
             
             var lineCoverageDictionary = new LineCoverageDictionary
@@ -18,23 +18,23 @@ namespace Tests.Models
                 {maxKey, 0}
             };
             
-            // When
+            // Act
             var array = lineCoverageDictionary.ToArray();
             
-            // Then
+            // Assert
             Assert.AreEqual(maxKey, array.Length);
         }
         
         [Test]
         public void WhenIToArray_WithAnEmptyDictionary_ItReturnsAnEmptyArray()
         {
-            // Given
+            // Arrange
             var lineCoverageDictionary = new LineCoverageDictionary();
 
-            // When
+            // Act
             var array = lineCoverageDictionary.ToArray();
             
-            // Then
+            // Assert
             Assert.IsEmpty(array);
         }
     }

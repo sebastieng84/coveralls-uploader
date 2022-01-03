@@ -12,26 +12,18 @@ public class CoverallsService
     private const string JobsResource = "jobs";
 
     private readonly ILogger _logger;
+    private readonly HttpClient _httpClient;
 
-    public CoverallsService(ILogger logger)
+    public CoverallsService(HttpClient httpClient,  ILogger logger)
     {
         _logger = logger;
+        _httpClient = httpClient;
     }
     
     public async Task UploadAsync(Job job)
     {
-        var contractResolver = new DefaultContractResolver
-        {
-            NamingStrategy = new SnakeCaseNamingStrategy()
-        };
-
-        var jobJson= JsonConvert.SerializeObject(job, new JsonSerializerSettings
-        {
-            ContractResolver = contractResolver,
-            NullValueHandling = NullValueHandling.Ignore
-        });
-
-        using var client = new HttpClient();
+        var jobJson = ConvertJobToJson(job);
+        
         using var formData = new MultipartFormDataContent();
         formData.Add(
             new StringContent(jobJson, Encoding.UTF8), 
@@ -42,11 +34,27 @@ public class CoverallsService
             "Sending the following JSON to Coveralls: {jobJson}", 
             jobJson);
         
-        var response = await client.PostAsync($"{CoverallsApiUrl}{JobsResource}", formData);
+        var response = await _httpClient.PostAsync($"{CoverallsApiUrl}{JobsResource}", formData);
         
+        // TODO: change LogLevel to Info and more meaningful message
         _logger.LogDebug(
             "Coveralls returned to following response: {statusCode} {content}", 
             response.StatusCode,
             await response.Content.ReadAsStringAsync());
+    }
+
+    private static string ConvertJobToJson(Job job)
+    {
+        var contractResolver = new DefaultContractResolver
+        {
+            NamingStrategy = new SnakeCaseNamingStrategy()
+        };
+        
+        return JsonConvert.SerializeObject(job, new JsonSerializerSettings
+        {
+            Formatting = Formatting.Indented,
+            ContractResolver = contractResolver,
+            NullValueHandling = NullValueHandling.Ignore
+        });
     }
 }
