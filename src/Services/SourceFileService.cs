@@ -19,7 +19,9 @@ public class SourceFileService
         _logger = logger;
     }
 
-    public async Task<IList<SourceFile>> CreateManyAsync(IList<FileCoverage> fileCoverages, CommandOptions commandOptions)
+    public async Task<IList<SourceFile>> CreateManyAsync(
+        IList<FileCoverage> fileCoverages, 
+        CommandOptions commandOptions)
     {
         return await Task.WhenAll(fileCoverages.Select(async file => await CreateAsync(file, commandOptions)));
     }
@@ -39,7 +41,7 @@ public class SourceFileService
         }
         catch (Exception)
         {
-            _logger.LogWarning("File not found: {filePath}", filePath);
+            _logger.LogWarning("Unable to read file's content: {filePath}", filePath);
         }
 
         return new SourceFile(

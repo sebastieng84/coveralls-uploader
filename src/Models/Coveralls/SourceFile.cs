@@ -8,8 +8,7 @@ namespace coveralls_uploader.Models.Coveralls
         [JsonProperty("source_digest")]
         public string Digest { get; set; }
         [JsonProperty("coverage")]
-        public int?[] LineCoverage { get; set; }
-        [JsonIgnore]
+        public int?[] LineCoverage { get; set; }    
         public int[] BranchCoverage { get; set; }
         public string Source { get; set; }
         

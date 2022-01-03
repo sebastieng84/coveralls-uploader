@@ -3,6 +3,7 @@ using System.CommandLine.Hosting;
 using System.CommandLine.Parsing;
 using System.IO.Abstractions;
 using coveralls_uploader;
+using coveralls_uploader.JobProviders;
 using coveralls_uploader.Parsers;
 using coveralls_uploader.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +20,7 @@ return await new CommandLineBuilder(new UploadCommand())
                     .AddSingleton<MainService>()
                     .AddSingleton<IFileSystem, FileSystem>()
                     .AddSingleton<IParser, LcovParser>()
-                    .AddSingleton<IJobDataFetcher, GitHubActionsDataFetcher>()
+                    .AddSingleton<IEnvironmentVariablesJobProvider, GitHubActionsJobProvider>()
                     .AddSingleton<CoverallsService>()
                     .AddSingleton<SourceFileService>()
                     .AddTransient<ILogger, Logger<UploadCommand>>();

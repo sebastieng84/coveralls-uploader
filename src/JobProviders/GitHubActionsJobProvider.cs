@@ -1,18 +1,13 @@
-using coveralls_uploader.Models;
 using coveralls_uploader.Models.Coveralls;
 using coveralls_uploader.Models.Coveralls.Git;
 
-namespace coveralls_uploader.Services;
+namespace coveralls_uploader.JobProviders;
 
-public class GitHubActionsDataFetcher : IJobDataFetcher
+public class GitHubActionsJobProvider : IEnvironmentVariablesJobProvider
 {
     private const string GithubActionsServiceName = "github";
-    
-    public GitHubActionsDataFetcher()
-    {
-    }
-    
-    public Job Fetch(CommandOptions commandOptions)
+
+    public Job Load()
     {
         return new Job
         {
