@@ -1,4 +1,5 @@
-﻿using coveralls_uploader.Models;
+﻿using coveralls_uploader.JobProviders;
+using coveralls_uploader.Models;
 using coveralls_uploader.Parsers;
 using Microsoft.Extensions.Logging;
 
@@ -9,20 +10,20 @@ public class MainService
     private readonly SourceFileService _sourceFileService;
     private readonly CoverallsService _coverallsService;
     private readonly IParser _parser;
-    private readonly IJobDataFetcher _jobDataFetcher;
+    private readonly IEnvironmentVariablesJobProvider _environmentVariablesJobProvider;
     private readonly ILogger _logger;
 
     public MainService(
         SourceFileService sourceFileService,
         CoverallsService coverallsService,
         IParser parser,
-        IJobDataFetcher jobDataFetcher,
+        IEnvironmentVariablesJobProvider environmentVariablesJobProvider,
         ILogger logger)
     {
         _sourceFileService = sourceFileService;
         _coverallsService = coverallsService;
         _parser = parser;
-        _jobDataFetcher = jobDataFetcher;
+        _environmentVariablesJobProvider = environmentVariablesJobProvider;
         _logger = logger;
     }
         
@@ -38,7 +39,7 @@ public class MainService
         var sourceFiles = await _sourceFileService.CreateManyAsync(fileCoverages, commandOptions);
 
         _logger.LogInformation("Fetching job data...");
-        var job = _jobDataFetcher.Fetch(commandOptions);
+        var job = _environmentVariablesJobProvider.Load();
         job.SourceFiles = sourceFiles;
         
         await _coverallsService.UploadAsync(job);
