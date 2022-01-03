@@ -34,16 +34,16 @@ namespace Tests.Services
         [Test]
         public async Task WhenICreateAsync_ThenItWorks()
         {
-            // Given
+            // Arrange
             var fileCoverage = new FileCoverage(TestFilePath);
             var commandOptions = new CommandOptions();
 
-            // When
+            // Act
             var sourceFiles = await _sut.CreateManyAsync(
                 new List<FileCoverage> {fileCoverage},
                 commandOptions);
 
-            // Then
+            // Assert
             Assert.IsNotEmpty(sourceFiles);
             Assert.AreEqual(1, sourceFiles.Count);
             Assert.IsNull(sourceFiles.First().Source);
@@ -56,40 +56,40 @@ namespace Tests.Services
         [Test]
         public async Task WhenICreateAsync_WithSourceOption_ThenItIncludesTheSourceFileContent()
         {
-            // Given
+            // Arrange
             var fileCoverage = new FileCoverage(TestFilePath);
             var commandOptions = new CommandOptions
             {
                 Source = true
             };
 
-            // When
+            // Act
             var sourceFiles = await _sut.CreateManyAsync(
                 new List<FileCoverage> {fileCoverage},
                 commandOptions);
 
-            // Then
+            // Assert
             Assert.IsNotEmpty(sourceFiles);
             Assert.AreEqual(1, sourceFiles.Count);
             Assert.AreEqual(TestFileContent, sourceFiles.First().Source);
         }
         
         [Test]
-        public async Task WhenICreateAsync_AndUnableToReadTextContent_ThenItLogsAWarning()
+        public async Task WhenICreateAsync_AndUnableToOpenFile_ThenItLogsAWarning()
         {
-            // Given
+            // Arrange
             var fileCoverage = new FileCoverage("I don't exist.cs");
             var commandOptions = new CommandOptions()
             {
                 Source = true
             };
 
-            // When
+            // Act
             var sourceFiles = await _sut.CreateManyAsync(
                 new List<FileCoverage> {fileCoverage},
                 commandOptions);
 
-            // Then
+            // Assert
             Assert.IsNotEmpty(sourceFiles);
             Assert.AreEqual(1, sourceFiles.Count);
             Assert.IsNull(sourceFiles.First().Source);
