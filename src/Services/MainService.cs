@@ -10,21 +10,21 @@ public class MainService
     private readonly SourceFileService _sourceFileService;
     private readonly CoverallsService _coverallsService;
     private readonly IParser _parser;
-    private readonly IEnvironmentVariablesJobProvider _environmentVariablesJobProvider;
     private readonly ILogger _logger;
+    private readonly EnvironmentVariablesJobProviderFactory _environmentVariablesJobProviderFactory;
 
     public MainService(
         SourceFileService sourceFileService,
         CoverallsService coverallsService,
         IParser parser,
-        IEnvironmentVariablesJobProvider environmentVariablesJobProvider,
-        ILogger logger)
+        ILogger logger,
+        EnvironmentVariablesJobProviderFactory environmentVariablesJobProviderFactory)
     {
         _sourceFileService = sourceFileService;
         _coverallsService = coverallsService;
         _parser = parser;
-        _environmentVariablesJobProvider = environmentVariablesJobProvider;
         _logger = logger;
+        _environmentVariablesJobProviderFactory = environmentVariablesJobProviderFactory;
     }
         
     public async Task RunAsync(CommandOptions commandOptions)
@@ -39,7 +39,8 @@ public class MainService
         var sourceFiles = await _sourceFileService.CreateManyAsync(fileCoverages, commandOptions);
 
         _logger.LogInformation("Fetching job data...");
-        var job = _environmentVariablesJobProvider.Load();
+        var environmentVariablesJobProvider = _environmentVariablesJobProviderFactory.Create();
+        var job = environmentVariablesJobProvider.Load();
         job.SourceFiles = sourceFiles;
         
         await _coverallsService.UploadAsync(job);

@@ -4,6 +4,6 @@
     {
         public Head Head { get; set; }
         public string Branch { get; set; }
-        public IEnumerable<Remote> Remotes { get; set; } = new List<Remote>();
+        public ICollection<Remote> Remotes { get; set; } = new List<Remote>();
     }
 }

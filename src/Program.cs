@@ -6,9 +6,11 @@ using coveralls_uploader;
 using coveralls_uploader.JobProviders;
 using coveralls_uploader.Parsers;
 using coveralls_uploader.Services;
+using coveralls_uploader.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RestSharp;
 
 return await new CommandLineBuilder(new UploadCommand())
     .UseHost(_ => Host.CreateDefaultBuilder(),
@@ -23,7 +25,12 @@ return await new CommandLineBuilder(new UploadCommand())
                     .AddSingleton<IEnvironmentVariablesJobProvider, GitHubActionsJobProvider>()
                     .AddSingleton<CoverallsService>()
                     .AddSingleton<SourceFileService>()
-                    .AddTransient<ILogger, Logger<UploadCommand>>();
+                    .AddSingleton<IEnvironmentWrapper, EnvironmentWrapper>()
+                    .AddTransient<ILogger, Logger<UploadCommand>>()
+                    .AddTransient<HttpClient>()
+                    .AddTransient<EnvironmentVariablesJobProviderFactory>()
+                    .AddTransient<JenkinsJobProvider>()
+                    .AddTransient<GitHubActionsJobProvider>();
             });
             host.ConfigureLogging((_, loggingBuilder) =>
             {
