@@ -6,9 +6,12 @@ namespace coveralls_uploader.JobProviders;
 
 public class EnvironmentVariablesJobProviderFactory
 {
+    public const string JenkinsEnvironmentVariable = "JENKINS_HOME";
+    public const string GitHubEnvironmentVariable = "GITHUB_ACTIONS";
+    
     private readonly IHost _host;
     private readonly IEnvironmentWrapper _environment;
-    
+
     public EnvironmentVariablesJobProviderFactory(
         IHost host,
         IEnvironmentWrapper environment)
@@ -26,7 +29,7 @@ public class EnvironmentVariablesJobProviderFactory
 
         if (IsGitHubEnvironment())
         {
-            return _host.Services.GetRequiredService<GitHubActionsJobProvider>();
+            return _host.Services.GetRequiredService<GitHubJobProvider>();
         }
 
         throw new ArgumentOutOfRangeException();
@@ -34,11 +37,11 @@ public class EnvironmentVariablesJobProviderFactory
 
     private bool IsJenkinsEnvironment()
     {
-        return !string.IsNullOrEmpty(_environment.GetEnvironmentVariable("JENKINS_HOME"));
+        return !string.IsNullOrEmpty(_environment.GetEnvironmentVariable(JenkinsEnvironmentVariable));
     }
     
     private bool IsGitHubEnvironment()
     {
-        return !string.IsNullOrEmpty(_environment.GetEnvironmentVariable("GITHUB_ACTIONS"));
+        return !string.IsNullOrEmpty(_environment.GetEnvironmentVariable(GitHubEnvironmentVariable));
     }
 }

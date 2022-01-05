@@ -22,7 +22,7 @@ return await new CommandLineBuilder(new UploadCommand())
                     .AddSingleton<MainService>()
                     .AddSingleton<IFileSystem, FileSystem>()
                     .AddSingleton<IParser, LcovParser>()
-                    .AddSingleton<IEnvironmentVariablesJobProvider, GitHubActionsJobProvider>()
+                    .AddSingleton<IEnvironmentVariablesJobProvider, GitHubJobProvider>()
                     .AddSingleton<CoverallsService>()
                     .AddSingleton<SourceFileService>()
                     .AddSingleton<IEnvironmentWrapper, EnvironmentWrapper>()
@@ -30,7 +30,7 @@ return await new CommandLineBuilder(new UploadCommand())
                     .AddTransient<HttpClient>()
                     .AddTransient<EnvironmentVariablesJobProviderFactory>()
                     .AddTransient<JenkinsJobProvider>()
-                    .AddTransient<GitHubActionsJobProvider>();
+                    .AddTransient<GitHubJobProvider>();
             });
             host.ConfigureLogging((_, loggingBuilder) =>
             {

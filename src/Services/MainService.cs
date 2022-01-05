@@ -42,6 +42,7 @@ public class MainService
         var environmentVariablesJobProvider = _environmentVariablesJobProviderFactory.Create();
         var job = environmentVariablesJobProvider.Load();
         job.SourceFiles = sourceFiles;
+        job.RepositoryToken = commandOptions.Token ?? job.RepositoryToken;
         
         await _coverallsService.UploadAsync(job);
     }
