@@ -23,11 +23,13 @@ namespace Tests.Services
         {
             {TestFilePath, new MockFileData(TestFileContent)}
         });
-        private readonly Mock<ILogger> _loggerMock = new();
+
+        private Mock<ILogger> _loggerMock;
         
         [SetUp]
         public void Setup()
         {
+            _loggerMock = new();
             _sut = new SourceFileService(_fileSystemMock, _loggerMock.Object);
         }
         

@@ -5,7 +5,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>coveralls_uploader</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>annotations</Nullable>
+        <Nullable>disable</Nullable>
         <PackAsTool>true</PackAsTool>
         <PackageOutputPath>./nupkg</PackageOutputPath>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

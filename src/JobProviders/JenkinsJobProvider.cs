@@ -1,38 +1,51 @@
 using System.Text.RegularExpressions;
 using coveralls_uploader.Models.Coveralls;
 using coveralls_uploader.Models.Coveralls.Git;
+using coveralls_uploader.Utilities;
 
 namespace coveralls_uploader.JobProviders;
 
 public class JenkinsJobProvider : IEnvironmentVariablesJobProvider
 {
-    private const string JenkinsServiceName = "jenkins";
+    public string ServiceName => "jenkins";
+
+    private readonly IEnvironmentWrapper _environment;
+
+    public JenkinsJobProvider()
+    {
+    }
+    
+    public JenkinsJobProvider(IEnvironmentWrapper environment)
+    {
+        _environment = environment;
+    }
+
     public Job Load()
     {
         var job = new Job
         {
-            RepositoryToken =  Environment.GetEnvironmentVariable(""),
-            ServiceName = JenkinsServiceName,
-            ServiceNumber = Environment.GetEnvironmentVariable("BUILD_NUMBER"),
-            CommitSha = Environment.GetEnvironmentVariable("GIT_COMMIT"),
+            RepositoryToken =  _environment.GetEnvironmentVariable("COVERALLS_TOKEN"),
+            ServiceName = ServiceName,
+            ServiceNumber = _environment.GetEnvironmentVariable("BUILD_NUMBER"),
+            CommitSha = _environment.GetEnvironmentVariable("GIT_COMMIT"),
             GitInformation = new GitInformation
             {
                 Head = new Head
                 {
-                    Id = Environment.GetEnvironmentVariable("GIT_COMMIT"),
-                    AuthorEmail = Environment.GetEnvironmentVariable("GIT_AUTHOR_EMAIL"),
-                    AuthorName = Environment.GetEnvironmentVariable("GIT_AUTHOR_NAME"),
-                    CommitterEmail = Environment.GetEnvironmentVariable("GIT_COMMITTER_EMAIL"),
-                    CommitterName = Environment.GetEnvironmentVariable("GIT_COMMITTER_NAME"),
-                    //Message = Environment.GetEnvironmentVariable("")
+                    Id = _environment.GetEnvironmentVariable("GIT_COMMIT"),
+                    AuthorEmail = _environment.GetEnvironmentVariable("GIT_AUTHOR_EMAIL"),
+                    AuthorName = _environment.GetEnvironmentVariable("GIT_AUTHOR_NAME"),
+                    CommitterEmail = _environment.GetEnvironmentVariable("GIT_COMMITTER_EMAIL"),
+                    CommitterName = _environment.GetEnvironmentVariable("GIT_COMMITTER_NAME"),
+                    // TODO: Add commit message
                 },
-                Branch = Environment.GetEnvironmentVariable("GIT_BRANCH")
+                Branch = _environment.GetEnvironmentVariable("GIT_BRANCH")
             }
         };
 
         try
         {
-            var repositoryUrl = Environment.GetEnvironmentVariable("GIT_URL");
+            var repositoryUrl = _environment.GetEnvironmentVariable("GIT_URL");
             var repositoryName = Regex.Match(repositoryUrl, @"^.*\/([^\/]+?).git$").Groups[1].Value;
 
             job.GitInformation.Remotes.Add(new Remote(repositoryName, repositoryUrl));

@@ -4,5 +4,6 @@ namespace coveralls_uploader.JobProviders;
 
 public interface IEnvironmentVariablesJobProvider
 {
+    public string ServiceName { get; }
     Job Load();
 }
