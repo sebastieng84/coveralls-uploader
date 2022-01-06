@@ -1,4 +1,8 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using coveralls_uploader.Models;
 using Microsoft.Extensions.Logging;
 

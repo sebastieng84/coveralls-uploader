@@ -1,4 +1,6 @@
-﻿using coveralls_uploader.Models;
+﻿using System.Collections.Generic;
+using System.IO;
+using coveralls_uploader.Models;
 
 namespace coveralls_uploader.Parsers
 {

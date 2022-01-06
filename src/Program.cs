@@ -2,6 +2,7 @@
 using System.CommandLine.Hosting;
 using System.CommandLine.Parsing;
 using System.IO.Abstractions;
+using System.Net.Http;
 using coveralls_uploader;
 using coveralls_uploader.JobProviders;
 using coveralls_uploader.Parsers;

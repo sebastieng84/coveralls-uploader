@@ -1,60 +1,63 @@
-﻿using System.Text;
+﻿using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using coveralls_uploader.Models.Coveralls;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace coveralls_uploader.Services;
-
-public class CoverallsService
+namespace coveralls_uploader.Services
 {
-    private const string CoverallsApiUrl = "https://coveralls.io/api/v1/";
-    private const string JobsResource = "jobs";
-
-    private readonly ILogger _logger;
-    private readonly HttpClient _httpClient;
-
-    public CoverallsService(HttpClient httpClient,  ILogger logger)
+    public class CoverallsService
     {
-        _logger = logger;
-        _httpClient = httpClient;
-    }
+        private const string CoverallsApiUrl = "https://coveralls.io/api/v1/";
+        private const string JobsResource = "jobs";
     
-    public async Task UploadAsync(Job job)
-    {
-        var jobJson = ConvertJobToJson(job);
-        
-        using var formData = new MultipartFormDataContent();
-        formData.Add(
-            new StringContent(jobJson, Encoding.UTF8), 
-            "json_file", 
-            "coverage.json");
-        
-        _logger.LogDebug(
-            "Sending the following JSON to Coveralls: {jobJson}", 
-            jobJson);
-        
-        var response = await _httpClient.PostAsync($"{CoverallsApiUrl}{JobsResource}", formData);
-        
-        // TODO: change LogLevel to Info and more meaningful message
-        _logger.LogDebug(
-            "Coveralls returned to following response: {statusCode} {content}", 
-            response.StatusCode,
-            await response.Content.ReadAsStringAsync());
-    }
-
-    private static string ConvertJobToJson(Job job)
-    {
-        var contractResolver = new DefaultContractResolver
+        private readonly ILogger _logger;
+        private readonly HttpClient _httpClient;
+    
+        public CoverallsService(HttpClient httpClient,  ILogger logger)
         {
-            NamingStrategy = new SnakeCaseNamingStrategy()
-        };
+            _logger = logger;
+            _httpClient = httpClient;
+        }
         
-        return JsonConvert.SerializeObject(job, new JsonSerializerSettings
+        public async Task UploadAsync(Job job)
         {
-            Formatting = Formatting.Indented,
-            ContractResolver = contractResolver,
-            NullValueHandling = NullValueHandling.Ignore
-        });
+            var jobJson = ConvertJobToJson(job);
+            
+            using var formData = new MultipartFormDataContent();
+            formData.Add(
+                new StringContent(jobJson, Encoding.UTF8), 
+                "json_file", 
+                "coverage.json");
+            
+            _logger.LogDebug(
+                "Sending the following JSON to Coveralls: {jobJson}", 
+                jobJson);
+            
+            var response = await _httpClient.PostAsync($"{CoverallsApiUrl}{JobsResource}", formData);
+            
+            // TODO: change LogLevel to Info and more meaningful message
+            _logger.LogDebug(
+                "Coveralls returned to following response: {statusCode} {content}", 
+                response.StatusCode,
+                await response.Content.ReadAsStringAsync());
+        }
+    
+        private static string ConvertJobToJson(Job job)
+        {
+            var contractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy()
+            };
+            
+            return JsonConvert.SerializeObject(job, new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                ContractResolver = contractResolver,
+                NullValueHandling = NullValueHandling.Ignore
+            });
+        }
     }
 }
