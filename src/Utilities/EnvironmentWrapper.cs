@@ -1,9 +1,12 @@
-namespace coveralls_uploader.Utilities;
+using System;
 
-public class EnvironmentWrapper : IEnvironmentWrapper
+namespace coveralls_uploader.Utilities
 {
-    public virtual string? GetEnvironmentVariable(string variable)
+    public class EnvironmentWrapper : IEnvironmentWrapper
     {
-        return Environment.GetEnvironmentVariable(variable);
+        public virtual string? GetEnvironmentVariable(string variable)
+        {
+            return Environment.GetEnvironmentVariable(variable);
+        }
     }
 }

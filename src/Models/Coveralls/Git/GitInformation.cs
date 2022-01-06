@@ -1,4 +1,6 @@
-﻿namespace coveralls_uploader.Models.Coveralls.Git
+﻿using System.Collections.Generic;
+
+namespace coveralls_uploader.Models.Coveralls.Git
 {
     public class GitInformation
     {

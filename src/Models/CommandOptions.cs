@@ -1,8 +1,11 @@
-namespace coveralls_uploader.Models;
+using System.IO;
 
-public class CommandOptions
+namespace coveralls_uploader.Models
 {
-    public FileInfo Input { get; set; }
-    public bool Source { get; set; }
-    public string? Token { get; set; }
+    public class CommandOptions
+    {
+        public FileInfo Input { get; set; }
+        public bool Source { get; set; }
+        public string? Token { get; set; }
+    }
 }

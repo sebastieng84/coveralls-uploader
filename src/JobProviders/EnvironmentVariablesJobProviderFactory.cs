@@ -1,47 +1,50 @@
+using System;
 using coveralls_uploader.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace coveralls_uploader.JobProviders;
-
-public class EnvironmentVariablesJobProviderFactory
+namespace coveralls_uploader.JobProviders
 {
-    public const string JenkinsEnvironmentVariable = "JENKINS_HOME";
-    public const string GitHubEnvironmentVariable = "GITHUB_ACTIONS";
     
-    private readonly IHost _host;
-    private readonly IEnvironmentWrapper _environment;
-
-    public EnvironmentVariablesJobProviderFactory(
-        IHost host,
-        IEnvironmentWrapper environment)
+    public class EnvironmentVariablesJobProviderFactory
     {
-        _host = host;
-        _environment = environment;
-    }
+        public const string JenkinsEnvironmentVariable = "JENKINS_HOME";
+        public const string GitHubEnvironmentVariable = "GITHUB_ACTIONS";
+    
+        private readonly IHost _host;
+        private readonly IEnvironmentWrapper _environment;
 
-    public IEnvironmentVariablesJobProvider Create()
-    {
-        if (IsJenkinsEnvironment())
+        public EnvironmentVariablesJobProviderFactory(
+            IHost host,
+            IEnvironmentWrapper environment)
         {
-            return _host.Services.GetRequiredService<JenkinsJobProvider>();
+            _host = host;
+            _environment = environment;
         }
 
-        if (IsGitHubEnvironment())
+        public IEnvironmentVariablesJobProvider Create()
         {
-            return _host.Services.GetRequiredService<GitHubJobProvider>();
+            if (IsJenkinsEnvironment())
+            {
+                return _host.Services.GetRequiredService<JenkinsJobProvider>();
+            }
+
+            if (IsGitHubEnvironment())
+            {
+                return _host.Services.GetRequiredService<GitHubJobProvider>();
+            }
+
+            throw new ArgumentOutOfRangeException();
         }
 
-        throw new ArgumentOutOfRangeException();
-    }
-
-    private bool IsJenkinsEnvironment()
-    {
-        return !string.IsNullOrEmpty(_environment.GetEnvironmentVariable(JenkinsEnvironmentVariable));
-    }
+        private bool IsJenkinsEnvironment()
+        {
+            return !string.IsNullOrEmpty(_environment.GetEnvironmentVariable(JenkinsEnvironmentVariable));
+        }
     
-    private bool IsGitHubEnvironment()
-    {
-        return !string.IsNullOrEmpty(_environment.GetEnvironmentVariable(GitHubEnvironmentVariable));
+        private bool IsGitHubEnvironment()
+        {
+            return !string.IsNullOrEmpty(_environment.GetEnvironmentVariable(GitHubEnvironmentVariable));
+        }
     }
 }

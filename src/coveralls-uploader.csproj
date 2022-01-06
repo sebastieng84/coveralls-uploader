@@ -2,14 +2,14 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
         <RootNamespace>coveralls_uploader</RootNamespace>
-        <ImplicitUsings>enable</ImplicitUsings>
+        <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <PackAsTool>true</PackAsTool>
         <PackageOutputPath>./nupkg</PackageOutputPath>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>0.2.0</PackageVersion>
+        <PackageVersion>0.3.2</PackageVersion>
         <Authors>sebastieng84</Authors>
         <PackageLicenseUrl>https://github.com/sebastieng84/coveralls-uploader/blob/master/LICENSE.md</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/sebastieng84/coveralls-uploader</RepositoryUrl>

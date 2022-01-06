@@ -1,9 +1,10 @@
 using coveralls_uploader.Models.Coveralls;
 
-namespace coveralls_uploader.JobProviders;
-
-public interface IEnvironmentVariablesJobProvider
+namespace coveralls_uploader.JobProviders
 {
-    public string ServiceName { get; }
-    Job Load();
+    public interface IEnvironmentVariablesJobProvider
+    {
+        public string ServiceName { get; }
+        Job Load();
+    } 
 }

@@ -1,6 +1,8 @@
-namespace coveralls_uploader.Utilities;
-
-public interface IEnvironmentWrapper
+namespace coveralls_uploader.Utilities
 {
-    public string? GetEnvironmentVariable(string variable);
+    public interface IEnvironmentWrapper
+    {
+        public string? GetEnvironmentVariable(string variable);
+    }
 }
+

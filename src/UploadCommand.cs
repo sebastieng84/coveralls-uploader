@@ -1,5 +1,8 @@
+using System;
 using System.CommandLine;
 using System.CommandLine.NamingConventionBinder;
+using System.IO;
+using System.Threading.Tasks;
 using coveralls_uploader.Models;
 using coveralls_uploader.Services;
 using Microsoft.Extensions.DependencyInjection;
