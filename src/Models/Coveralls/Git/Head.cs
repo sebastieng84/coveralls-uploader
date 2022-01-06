@@ -14,9 +14,5 @@ namespace coveralls_uploader.Models.Coveralls.Git
         [JsonProperty("committer_email")]
         public string CommitterEmail { get; set; }
         public string Message { get; set; }
-
-        public Head()
-        {
-        }
     }
 }
