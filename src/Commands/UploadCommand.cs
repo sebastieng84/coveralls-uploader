@@ -8,8 +8,10 @@ using coveralls_uploader.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog.Core;
+using Serilog.Events;
 
-namespace coveralls_uploader
+namespace coveralls_uploader.Commands
 {
     public sealed class UploadCommand : RootCommand
     {
@@ -32,10 +34,11 @@ namespace coveralls_uploader
             });
             AddOption(new Option<bool>(
                 new[] {"--source", "-s"},
-                "Include source file content in the request.")
-            {
-                Arity = ArgumentArity.ZeroOrOne
-            });
+                "Include source file content in the request."));
+
+            AddOption(new Option<bool>(
+                new[] {"--verbose", "-v"},
+                "Show verbose output."));
 
             Handler = CommandHandler.Create<CommandOptions, IHost>(Run);
         }
@@ -45,13 +48,20 @@ namespace coveralls_uploader
             var mainService = host.Services.GetRequiredService<MainService>();
             var logger = host.Services.GetRequiredService<ILogger>();
             
+            if (commandOptions.Verbose)
+            {
+                host.Services
+                    .GetRequiredService<LoggingLevelSwitch>()
+                    .MinimumLevel = LogEventLevel.Verbose;
+            }
+            logger.LogDebug("lol");
             try
             {
                 await mainService.RunAsync(commandOptions);
             }
             catch (Exception exception)
             {
-                logger.LogError("An error has occured: {message}", exception.Message);
+                logger.LogError(exception, "An unhandled error has occured!");
                 return -1;
             }
 

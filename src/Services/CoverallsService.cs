@@ -54,7 +54,6 @@ namespace coveralls_uploader.Services
             
             return JsonConvert.SerializeObject(job, new JsonSerializerSettings
             {
-                Formatting = Formatting.Indented,
                 ContractResolver = contractResolver,
                 NullValueHandling = NullValueHandling.Ignore
             });

@@ -6,6 +6,7 @@ namespace coveralls_uploader.Models
     {
         public FileInfo Input { get; set; }
         public bool Source { get; set; }
+        public bool Verbose { get; set; }
         public string? Token { get; set; }
     }
 }
