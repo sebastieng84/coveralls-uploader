@@ -8,8 +8,10 @@ using coveralls_uploader.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog.Core;
+using Serilog.Events;
 
-namespace coveralls_uploader
+namespace coveralls_uploader.Commands
 {
     public sealed class UploadCommand : RootCommand
     {
@@ -32,30 +34,11 @@ namespace coveralls_uploader
             });
             AddOption(new Option<bool>(
                 new[] {"--source", "-s"},
-                "Include source file content in the request.")
-            {
-                Arity = ArgumentArity.ZeroOrOne
-            });
+                "Include source file content in the request."));
 
-            Handler = CommandHandler.Create<CommandOptions, IHost>(Run);
-        }
-
-        private static async Task<int> Run(CommandOptions commandOptions, IHost host)
-        {
-            var mainService = host.Services.GetRequiredService<MainService>();
-            var logger = host.Services.GetRequiredService<ILogger>();
-            
-            try
-            {
-                await mainService.RunAsync(commandOptions);
-            }
-            catch (Exception exception)
-            {
-                logger.LogError("An error has occured: {message}", exception.Message);
-                return -1;
-            }
-
-            return 0;
+            AddOption(new Option<bool>(
+                new[] {"--verbose", "-v"},
+                "Show verbose output."));
         }
     }
 }

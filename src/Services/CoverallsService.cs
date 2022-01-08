@@ -2,9 +2,9 @@
 using System.Text;
 using System.Threading.Tasks;
 using coveralls_uploader.Models.Coveralls;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Serilog;
 
 namespace coveralls_uploader.Services
 {
@@ -32,15 +32,15 @@ namespace coveralls_uploader.Services
                 "json_file", 
                 "coverage.json");
             
-            _logger.LogDebug(
-                "Sending the following JSON to Coveralls: {jobJson}", 
+            _logger.Debug(
+                "Sending the following JSON to Coveralls: {JobJson}", 
                 jobJson);
             
             var response = await _httpClient.PostAsync($"{CoverallsApiUrl}{JobsResource}", formData);
             
             // TODO: change LogLevel to Info and more meaningful message
-            _logger.LogDebug(
-                "Coveralls returned to following response: {statusCode} {content}", 
+            _logger.Debug(
+                "Coveralls returned to following response: {StatusCode} {Content}", 
                 response.StatusCode,
                 await response.Content.ReadAsStringAsync());
         }
@@ -54,7 +54,6 @@ namespace coveralls_uploader.Services
             
             return JsonConvert.SerializeObject(job, new JsonSerializerSettings
             {
-                Formatting = Formatting.Indented,
                 ContractResolver = contractResolver,
                 NullValueHandling = NullValueHandling.Ignore
             });

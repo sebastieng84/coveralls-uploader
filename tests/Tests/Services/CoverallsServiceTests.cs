@@ -1,18 +1,19 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using coveralls_uploader.Models.Coveralls;
 using coveralls_uploader.Services;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
 using NUnit.Framework;
+using Serilog;
 using static Moq.It;
 
 namespace Tests.Services;
 
-public class GivenACoverallsService
+public class CoverallsServiceTests
 {
     private CoverallsService _sut;
     private readonly Mock<HttpMessageHandler> _httpMessageHandlerMock = new();
@@ -42,12 +43,11 @@ public class GivenACoverallsService
         await _sut.UploadAsync(job);
 
         // Assert
-        _loggerMock.Verify(logger => logger.Log(
-                LogLevel.Debug,
-                IsAny<EventId>(),
-                IsAny<IsAnyType>(),
-                IsAny<Exception?>(),
-                IsAny<Func<IsAnyType, Exception?, string>>()),
-            Times.Exactly(2));
+        _loggerMock.Verify(
+            logger => logger.Debug(IsAny<string>(), IsAny<string>()),
+            Times.Once);
+        _loggerMock.Verify(
+            logger => logger.Debug(IsAny<string>(), IsAny<HttpStatusCode>(), IsAny<string>()),
+            Times.Once);
     }
 }

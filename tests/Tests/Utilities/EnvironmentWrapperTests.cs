@@ -3,20 +3,20 @@ using NUnit.Framework;
 
 namespace Tests.Utilities;
 
-public class GivenAnEnvironmentWrapper
+public class EnvironmentWrapperTests
 {
     private readonly EnvironmentWrapper _sut = new();
 
     [Test]
     public void WhenIGetEnvironmentVariable_AndVariableDoesNotExist_ThenItReturnsNull()
     {
-        // Given
+        // Arrange
         const string variableName = "Test";
 
-        // When
+        // Act
         var value = _sut.GetEnvironmentVariable(variableName);
         
-        // Then 
+        // Assert 
         Assert.IsNull(value);
     }
 }

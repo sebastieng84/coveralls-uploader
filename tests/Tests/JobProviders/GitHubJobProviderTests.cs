@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Tests.JobProviders;
 
-public class GivenAGitHubJobProvider
+public class GitHubJobProviderTests
 {
     private GitHubJobProvider _sut;
     private Mock<IEnvironmentWrapper> _environmentWrapperMock;
@@ -20,23 +20,23 @@ public class GivenAGitHubJobProvider
     [Test]
     public void WhenILoad_ThenTheJobHasTheRightServiceName()
     {
-        // Given
-        // When
+        // Arrange
+        // Act
         var job = _sut.Load();
         
-        // Then
+        // Assert
         Assert.AreEqual(_sut.ServiceName, job.ServiceName);
     }
     
     [Test]
     public void WhenILoad_ThenItUsesRightEnvironmentVariables()
     {
-        // Given
+        // Arrange
         var environmentVariables = new[]
         {
             "GITHUB_TOKEN", "GITHUB_RUN_NUMBER", "GITHUB_RUN_ID", "GITHUB_SHA", "GIT_COMMIT_AUTHOR_EMAIL",
             "GIT_COMMIT_AUTHOR_NAME", "GIT_COMMIT_COMMITTER_EMAIL", "GIT_COMMIT_COMMITTER_NAME",
-            "GIT_COMMIT_MESSAGE_SUBJECT_SANITIZED", "GITHUB_REF"
+            "GIT_COMMIT_MESSAGE_BODY", "GITHUB_REF"
         };
 
         foreach (var environmentVariable in environmentVariables)
@@ -46,10 +46,10 @@ public class GivenAGitHubJobProvider
                 .Returns(environmentVariable + "_VALUE");
         }
         
-        // When
+        // Act
         var job = _sut.Load();
         
-        // Then
+        // Assert
         Assert.Multiple(() =>
         {
             Assert.AreEqual("GITHUB_TOKEN_VALUE", job.RepositoryToken);
@@ -61,7 +61,7 @@ public class GivenAGitHubJobProvider
             Assert.AreEqual("GIT_COMMIT_AUTHOR_NAME_VALUE", job.GitInformation.Head.AuthorName);
             Assert.AreEqual("GIT_COMMIT_COMMITTER_EMAIL_VALUE", job.GitInformation.Head.CommitterEmail);
             Assert.AreEqual("GIT_COMMIT_COMMITTER_NAME_VALUE", job.GitInformation.Head.CommitterName);
-            Assert.AreEqual("GIT_COMMIT_MESSAGE_SUBJECT_SANITIZED_VALUE", job.GitInformation.Head.Message);
+            Assert.AreEqual("GIT_COMMIT_MESSAGE_BODY_VALUE", job.GitInformation.Head.Message);
             Assert.AreEqual("GITHUB_REF_VALUE", job.GitInformation.Branch);
         });
     }
@@ -69,11 +69,11 @@ public class GivenAGitHubJobProvider
     [Test]
     public void WhenILoad_AndEnvironmentVariablesAreNotSet_TheItReturnsNullValues()
     {
-        // Given
-        // When
+        // Arrange
+        // Act
         var job = _sut.Load();
         
-        // Then
+        // Assert
         Assert.Multiple(() =>
         {
             Assert.IsNull(job.RepositoryToken);

@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using coveralls_uploader.Models.Coveralls;
 using coveralls_uploader.Models.Coveralls.Git;
 using coveralls_uploader.Utilities;
+using Microsoft.Extensions.Logging;
 
 namespace coveralls_uploader.JobProviders
 {
@@ -20,7 +21,7 @@ namespace coveralls_uploader.JobProviders
        {
            _environment = environment;
        }
-   
+
        public Job Load()
        {
            var job = new Job

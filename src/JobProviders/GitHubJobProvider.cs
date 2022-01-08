@@ -37,7 +37,7 @@ namespace coveralls_uploader.JobProviders
                         AuthorName = _environment.GetEnvironmentVariable("GIT_COMMIT_AUTHOR_NAME"),
                         CommitterEmail = _environment.GetEnvironmentVariable("GIT_COMMIT_COMMITTER_EMAIL"),
                         CommitterName = _environment.GetEnvironmentVariable("GIT_COMMIT_COMMITTER_NAME"),
-                        Message = _environment.GetEnvironmentVariable("GIT_COMMIT_MESSAGE_SUBJECT_SANITIZED")
+                        Message = _environment.GetEnvironmentVariable("GIT_COMMIT_MESSAGE_BODY")
                     },
                     // TODO: Add Remotes 
                     Branch = _environment.GetEnvironmentVariable("GITHUB_REF")

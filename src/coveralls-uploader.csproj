@@ -9,7 +9,7 @@
         <PackAsTool>true</PackAsTool>
         <PackageOutputPath>./nupkg</PackageOutputPath>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>0.3.2</PackageVersion>
+        <PackageVersion>0.3.3</PackageVersion>
         <Authors>sebastieng84</Authors>
         <PackageLicenseUrl>https://github.com/sebastieng84/coveralls-uploader/blob/master/LICENSE.md</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/sebastieng84/coveralls-uploader</RepositoryUrl>
@@ -20,6 +20,8 @@
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
       <PackageReference Include="RestSharp" Version="106.13.0" />
+      <PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="4.0.2-dev-00890" />
       <PackageReference Include="System.CommandLine.Hosting" Version="0.4.0-alpha.21617.1" />
       <PackageReference Include="System.IO.Abstractions" Version="14.0.13" />
     </ItemGroup>
