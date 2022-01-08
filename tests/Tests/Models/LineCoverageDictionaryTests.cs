@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace Tests.Models
 {
-    public class GivenALineCoverageDictionary
+    public class LineCoverageDictionaryTests
     {
         [Test]
         public void WhenIToArray_ItReturnsAnArrayUpToTheMaxKey()

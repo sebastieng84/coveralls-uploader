@@ -39,33 +39,6 @@ namespace coveralls_uploader.Commands
             AddOption(new Option<bool>(
                 new[] {"--verbose", "-v"},
                 "Show verbose output."));
-
-            Handler = CommandHandler.Create<CommandOptions, IHost>(Run);
-        }
-
-        private static async Task<int> Run(CommandOptions commandOptions, IHost host)
-        {
-            var mainService = host.Services.GetRequiredService<MainService>();
-            var logger = host.Services.GetRequiredService<ILogger>();
-            
-            if (commandOptions.Verbose)
-            {
-                host.Services
-                    .GetRequiredService<LoggingLevelSwitch>()
-                    .MinimumLevel = LogEventLevel.Verbose;
-            }
-            logger.LogDebug("lol");
-            try
-            {
-                await mainService.RunAsync(commandOptions);
-            }
-            catch (Exception exception)
-            {
-                logger.LogError(exception, "An unhandled error has occured!");
-                return -1;
-            }
-
-            return 0;
         }
     }
 }

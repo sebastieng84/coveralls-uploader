@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace Tests.Models
 {
-    public class GivenABranchCoverageList
+    public class BranchCoverageListTests
     {
         [Test]
         public void WhenIToArray_WithAnEmptyList_ThenItReturnsAnEmptyArray()

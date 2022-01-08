@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Tests.JobProviders;
 
-public class GivenAGitHubJobProvider
+public class GitHubJobProviderTests
 {
     private GitHubJobProvider _sut;
     private Mock<IEnvironmentWrapper> _environmentWrapperMock;
@@ -20,18 +20,18 @@ public class GivenAGitHubJobProvider
     [Test]
     public void WhenILoad_ThenTheJobHasTheRightServiceName()
     {
-        // Given
-        // When
+        // Arrange
+        // Act
         var job = _sut.Load();
         
-        // Then
+        // Assert
         Assert.AreEqual(_sut.ServiceName, job.ServiceName);
     }
     
     [Test]
     public void WhenILoad_ThenItUsesRightEnvironmentVariables()
     {
-        // Given
+        // Arrange
         var environmentVariables = new[]
         {
             "GITHUB_TOKEN", "GITHUB_RUN_NUMBER", "GITHUB_RUN_ID", "GITHUB_SHA", "GIT_COMMIT_AUTHOR_EMAIL",
@@ -46,10 +46,10 @@ public class GivenAGitHubJobProvider
                 .Returns(environmentVariable + "_VALUE");
         }
         
-        // When
+        // Act
         var job = _sut.Load();
         
-        // Then
+        // Assert
         Assert.Multiple(() =>
         {
             Assert.AreEqual("GITHUB_TOKEN_VALUE", job.RepositoryToken);
@@ -69,11 +69,11 @@ public class GivenAGitHubJobProvider
     [Test]
     public void WhenILoad_AndEnvironmentVariablesAreNotSet_TheItReturnsNullValues()
     {
-        // Given
-        // When
+        // Arrange
+        // Act
         var job = _sut.Load();
         
-        // Then
+        // Assert
         Assert.Multiple(() =>
         {
             Assert.IsNull(job.RepositoryToken);

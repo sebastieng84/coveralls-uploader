@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ using static Moq.It;
 
 namespace Tests.Services
 {
-    public class GivenASourceFileService
+    public class SourceFileServiceTests
     {
         private const string TestFilePath = "/test.cs";
         private const string TestFileContent = "This is a test file!";

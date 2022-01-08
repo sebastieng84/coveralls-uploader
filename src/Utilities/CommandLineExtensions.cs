@@ -1,10 +1,12 @@
 using System.CommandLine.Builder;
+using System.Diagnostics.CodeAnalysis;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 
 namespace coveralls_uploader.Utilities
 {
+    [ExcludeFromCodeCoverage]
     public static class CommandLineExtensions
     {
         public static CommandLineBuilder ConfigureSerilog(

@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace Tests.JobProviders;
 
-public class GivenAnEnvironmentVariablesJobProviderFactory
+public class EnvironmentVariablesJobProviderFactoryTests
 {
     private EnvironmentVariablesJobProviderFactory _sut;
 
