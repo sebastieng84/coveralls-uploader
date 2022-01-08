@@ -31,15 +31,15 @@ namespace coveralls_uploader.Commands
             var mainService = _host.Services.GetRequiredService<MainService>();
             var logger = _host.Services.GetRequiredService<ILogger>();
             
-            if (Verbose)
-            {
-                _host.Services
-                    .GetRequiredService<LoggingLevelSwitch>()
-                    .MinimumLevel = LogEventLevel.Verbose;
-            }
-
             try
             {
+                if (Verbose)
+                {
+                    _host.Services
+                        .GetRequiredService<LoggingLevelSwitch>()
+                        .MinimumLevel = LogEventLevel.Verbose;
+                }
+            
                 await mainService.RunAsync(new CommandOptions(
                     Input, 
                     Source, 

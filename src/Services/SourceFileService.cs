@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using coveralls_uploader.Models;
 using coveralls_uploader.Models.Coveralls;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace coveralls_uploader.Services
 {
@@ -45,7 +45,7 @@ namespace coveralls_uploader.Services
             }
             catch (Exception)
             {
-                _logger.LogWarning("Unable to read file's content: {filePath}", filePath);
+                _logger.Warning("Unable to read file's content: {FilePath}", filePath);
             }
     
             return new SourceFile(
