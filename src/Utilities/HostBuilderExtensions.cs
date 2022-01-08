@@ -24,7 +24,6 @@ namespace coveralls_uploader.Utilities
             hostBuilder.ConfigureServices(services =>
             {
                 services
-                    .AddTransient<ILogger, Logger<UploadCommand>>()
                     .AddSingleton(Log.Logger)
                     .AddSingleton(typeof(LoggingLevelSwitch), loggingLevelSwitch)
                     .AddTransient<IFileSystem, FileSystem>()

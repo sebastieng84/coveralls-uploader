@@ -2,7 +2,7 @@
 using coveralls_uploader.JobProviders;
 using coveralls_uploader.Models;
 using coveralls_uploader.Parsers;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace coveralls_uploader.Services
 {
@@ -14,6 +14,10 @@ namespace coveralls_uploader.Services
         private readonly ILogger _logger;
         private readonly EnvironmentVariablesJobProviderFactory _environmentVariablesJobProviderFactory;
 
+        public MainService()
+        {
+        }
+        
         public MainService(
             SourceFileService sourceFileService,
             CoverallsService coverallsService,
@@ -28,18 +32,18 @@ namespace coveralls_uploader.Services
             _environmentVariablesJobProviderFactory = environmentVariablesJobProviderFactory;
         }
         
-        public async Task RunAsync(CommandOptions commandOptions)
+        public virtual async Task RunAsync(CommandOptions commandOptions)
         {
-            _logger.LogInformation(
-                "Parsing the input file {input}", 
+            _logger.Information(
+                "Parsing the input file {Input}", 
                 commandOptions.Input);
         
             var fileCoverages = _parser.Parse(commandOptions.Input);
 
-            _logger.LogInformation("Converting FileCoverage to SourceFile...");
+            _logger.Information("Converting FileCoverage to SourceFile...");
             var sourceFiles = await _sourceFileService.CreateManyAsync(fileCoverages, commandOptions);
 
-            _logger.LogInformation("Fetching job data...");
+            _logger.Information("Fetching job data...");
             var environmentVariablesJobProvider = _environmentVariablesJobProviderFactory.Create();
             var job = environmentVariablesJobProvider.Load();
             job.SourceFiles = sourceFiles;
