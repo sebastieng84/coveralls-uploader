@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using System.Threading.Tasks;
 using coveralls_uploader.Models;
 using coveralls_uploader.Services;
-using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using static Moq.It;
+using Serilog;
 
 namespace Tests.Services
 {
@@ -97,12 +94,8 @@ namespace Tests.Services
             Assert.AreEqual(1, sourceFiles.Count);
             Assert.IsNull(sourceFiles.First().Source);
 
-            _loggerMock.Verify(logger => logger.Log(
-                    LogLevel.Warning, 
-                    IsAny<EventId>(), 
-                    IsAny<IsAnyType>(), 
-                    IsAny<Exception?>(), 
-                    IsAny<Func<IsAnyType,Exception?,string>>()),
+            _loggerMock.Verify(
+                logger => logger.Warning(It.IsAny<string>(), It.IsAny<string>()),
                 Times.Once);
         }
     }
