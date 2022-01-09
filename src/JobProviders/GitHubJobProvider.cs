@@ -27,6 +27,7 @@ namespace coveralls_uploader.JobProviders
                 ServiceName = ServiceName,
                 ServiceNumber = _environment.GetEnvironmentVariable("GITHUB_RUN_NUMBER"),
                 ServiceJobId = _environment.GetEnvironmentVariable("GITHUB_RUN_ID"),
+                ServicePullRequest = _environment.GetEnvironmentVariable("GITHUB_PULL_REQUEST_NUMBER"),
                 CommitSha = _environment.GetEnvironmentVariable("GITHUB_SHA"),
                 GitInformation = new GitInformation
                 {
