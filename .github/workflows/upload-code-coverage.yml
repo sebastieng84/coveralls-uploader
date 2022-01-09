@@ -35,7 +35,7 @@ jobs:
         uses: rlespinasse/git-commit-data-action@v1.x
       - name: Set pull request number
         if: github.event_name == 'pull_request'
-        run: echo "GITHUB_PULL_REQUEST_NUMBER=${{github.event.issue.number}}" >> $GITHUB_ENV
+        run: echo "GITHUB_PULL_REQUEST_NUMBER=echo ${{github.event.number}}" >> $GITHUB_ENV
       - name: Test
         run: echo ${{ env.GITHUB_PULL_REQUEST_NUMBER }}
       - name: Upload data to coveralls.io
