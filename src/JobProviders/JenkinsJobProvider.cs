@@ -3,7 +3,6 @@ using System.Text.RegularExpressions;
 using coveralls_uploader.Models.Coveralls;
 using coveralls_uploader.Models.Coveralls.Git;
 using coveralls_uploader.Utilities;
-using Microsoft.Extensions.Logging;
 
 namespace coveralls_uploader.JobProviders
 {
@@ -26,10 +25,11 @@ namespace coveralls_uploader.JobProviders
        {
            var job = new Job
            {
-               RepositoryToken =  _environment.GetEnvironmentVariable("COVERALLS_TOKEN"),
+               RepositoryToken = _environment.GetEnvironmentVariable("COVERALLS_TOKEN"),
                ServiceName = ServiceName,
                ServiceNumber = _environment.GetEnvironmentVariable("BUILD_NUMBER"),
                CommitSha = _environment.GetEnvironmentVariable("GIT_COMMIT"),
+               ServicePullRequest = _environment.GetEnvironmentVariable("COVERALLS_PULL_REQUEST_NUMBER"),
                GitInformation = new GitInformation
                {
                    Head = new Head
@@ -49,8 +49,10 @@ namespace coveralls_uploader.JobProviders
            {
                var repositoryUrl = _environment.GetEnvironmentVariable("GIT_URL");
                var repositoryName = Regex.Match(repositoryUrl, @"^.*\/([^\/]+?).git$").Groups[1].Value;
-   
-               job.GitInformation.Remotes.Add(new Remote(repositoryName, repositoryUrl));
+               if (!string.IsNullOrEmpty(repositoryName))
+               {
+                   job.GitInformation.Remotes.Add(new Remote(repositoryName, repositoryUrl));
+               }
            }
            catch (Exception)
            {

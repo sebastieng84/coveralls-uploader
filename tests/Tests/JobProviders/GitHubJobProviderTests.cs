@@ -34,9 +34,17 @@ public class GitHubJobProviderTests
         // Arrange
         var environmentVariables = new[]
         {
-            "GITHUB_TOKEN", "GITHUB_RUN_NUMBER", "GITHUB_RUN_ID", "GITHUB_SHA", "GIT_COMMIT_AUTHOR_EMAIL",
-            "GIT_COMMIT_AUTHOR_NAME", "GIT_COMMIT_COMMITTER_EMAIL", "GIT_COMMIT_COMMITTER_NAME",
-            "GIT_COMMIT_MESSAGE_BODY", "GITHUB_REF", "GITHUB_PULL_REQUEST_NUMBER"
+            "GITHUB_TOKEN",
+            "GITHUB_RUN_NUMBER", 
+            "GITHUB_RUN_ID",
+            "GITHUB_SHA", 
+            "GIT_COMMIT_AUTHOR_EMAIL",
+            "GIT_COMMIT_AUTHOR_NAME", 
+            "GIT_COMMIT_COMMITTER_EMAIL",
+            "GIT_COMMIT_COMMITTER_NAME",
+            "GIT_COMMIT_MESSAGE_BODY", 
+            "GITHUB_REF", 
+            "COVERALLS_PULL_REQUEST_NUMBER"
         };
 
         foreach (var environmentVariable in environmentVariables)
@@ -55,7 +63,7 @@ public class GitHubJobProviderTests
             Assert.AreEqual("GITHUB_TOKEN_VALUE", job.RepositoryToken);
             Assert.AreEqual("GITHUB_RUN_NUMBER_VALUE", job.ServiceNumber);
             Assert.AreEqual("GITHUB_RUN_ID_VALUE", job.ServiceJobId);
-            Assert.AreEqual("GITHUB_PULL_REQUEST_NUMBER_VALUE", job.ServicePullRequest);
+            Assert.AreEqual("COVERALLS_PULL_REQUEST_NUMBER_VALUE", job.ServicePullRequest);
             Assert.AreEqual("GITHUB_SHA_VALUE", job.CommitSha);
             Assert.AreEqual("GITHUB_SHA_VALUE", job.GitInformation.Head.Id);
             Assert.AreEqual("GIT_COMMIT_AUTHOR_EMAIL_VALUE", job.GitInformation.Head.AuthorEmail);
