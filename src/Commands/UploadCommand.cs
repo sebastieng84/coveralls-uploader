@@ -17,7 +17,8 @@ namespace coveralls_uploader.Commands
     {
         public UploadCommand()
         {
-            // TODO: Add description
+            Description = @"Parse and upload a lcov code coverage report and to Coveralls.io";
+
             AddOption(
                 new Option<FileInfo>(
                     new[] {"--input", "-i"},

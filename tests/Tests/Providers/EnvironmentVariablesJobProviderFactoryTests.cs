@@ -1,11 +1,11 @@
 using System;
-using coveralls_uploader.JobProviders;
+using coveralls_uploader.Providers;
 using coveralls_uploader.Utilities;
 using Microsoft.Extensions.Hosting;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests.JobProviders;
+namespace Tests.Providers;
 
 public class EnvironmentVariablesJobProviderFactoryTests
 {
@@ -30,7 +30,7 @@ public class EnvironmentVariablesJobProviderFactoryTests
             .Setup(host => host.Services.GetService(typeof(JenkinsJobProvider)))
             .Returns(new Mock<JenkinsJobProvider>().Object);
         _environmentWrapperMock
-            .Setup(wrapper => wrapper.GetEnvironmentVariable(EnvironmentVariablesJobProviderFactory.JenkinsEnvironmentVariable))
+            .Setup(wrapper => wrapper.GetEnvironmentVariable("JENKINS_HOME"))
             .Returns("not empty");
 
         // When
@@ -48,7 +48,7 @@ public class EnvironmentVariablesJobProviderFactoryTests
             .Setup(host => host.Services.GetService(typeof(GitHubJobProvider)))
             .Returns(new Mock<GitHubJobProvider>().Object);
         _environmentWrapperMock
-            .Setup(wrapper => wrapper.GetEnvironmentVariable(EnvironmentVariablesJobProviderFactory.GitHubEnvironmentVariable))
+            .Setup(wrapper => wrapper.GetEnvironmentVariable("GITHUB_ACTIONS"))
             .Returns("not empty");
 
         // When

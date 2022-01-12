@@ -3,13 +3,13 @@ using coveralls_uploader.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace coveralls_uploader.JobProviders
+namespace coveralls_uploader.Providers
 {
     
     public class EnvironmentVariablesJobProviderFactory
     {
-        public const string JenkinsEnvironmentVariable = "JENKINS_HOME";
-        public const string GitHubEnvironmentVariable = "GITHUB_ACTIONS";
+        private const string JenkinsEnvironmentVariable = "JENKINS_HOME";
+        private const string GitHubEnvironmentVariable = "GITHUB_ACTIONS";
     
         private readonly IHost _host;
         private readonly IEnvironmentWrapper _environment;

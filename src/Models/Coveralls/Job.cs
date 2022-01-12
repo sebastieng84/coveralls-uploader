@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using coveralls_uploader.Models.Coveralls.Git;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace coveralls_uploader.Models.Coveralls
@@ -19,8 +17,7 @@ namespace coveralls_uploader.Models.Coveralls
         public string FlagName { get; set; }
         public string CommitSha { get; set; }
         public string RunAt { get; set; }
-        [JsonProperty("git")] 
-        public GitInformation GitInformation { get; set; }
+        public Git Git { get; set; }
 
         public Job()
         {

@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 
 namespace coveralls_uploader.Utilities

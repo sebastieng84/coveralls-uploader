@@ -1,16 +1,13 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using System.Net.Http;
-using coveralls_uploader.Commands;
-using coveralls_uploader.JobProviders;
 using coveralls_uploader.Parsers;
+using coveralls_uploader.Providers;
 using coveralls_uploader.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Core;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace coveralls_uploader.Utilities
 {
@@ -36,7 +33,8 @@ namespace coveralls_uploader.Utilities
                     .AddTransient<HttpClient>()
                     .AddTransient<EnvironmentVariablesJobProviderFactory>()
                     .AddTransient<JenkinsJobProvider>()
-                    .AddTransient<GitHubJobProvider>();
+                    .AddTransient<GitHubJobProvider>()
+                    .AddTransient<GitDataProviderFactory>();
             });
 
             return hostBuilder;

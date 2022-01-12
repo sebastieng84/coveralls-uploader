@@ -1,3 +1,4 @@
+#nullable enable
 namespace coveralls_uploader.Utilities
 {
     public interface IEnvironmentWrapper
