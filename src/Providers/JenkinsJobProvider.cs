@@ -1,16 +1,14 @@
-using System;
-using System.Text.RegularExpressions;
+#nullable enable
 using coveralls_uploader.Models.Coveralls;
-using coveralls_uploader.Models.Coveralls.Git;
 using coveralls_uploader.Utilities;
 
-namespace coveralls_uploader.JobProviders
+namespace coveralls_uploader.Providers
 {
    public class JenkinsJobProvider : IEnvironmentVariablesJobProvider
    {
        public string ServiceName => "jenkins";
    
-       private readonly IEnvironmentWrapper _environment;
+       private readonly IEnvironmentWrapper _environment = null!;
    
        public JenkinsJobProvider()
        {
@@ -30,7 +28,7 @@ namespace coveralls_uploader.JobProviders
                ServiceNumber = _environment.GetEnvironmentVariable("BUILD_NUMBER"),
                CommitSha = _environment.GetEnvironmentVariable("GIT_COMMIT"),
                ServicePullRequest = _environment.GetEnvironmentVariable("COVERALLS_PULL_REQUEST_NUMBER"),
-               GitInformation = new GitInformation
+               Git = new Git
                {
                    Head = new Head
                    {
@@ -39,27 +37,19 @@ namespace coveralls_uploader.JobProviders
                        AuthorName = _environment.GetEnvironmentVariable("GIT_AUTHOR_NAME"),
                        CommitterEmail = _environment.GetEnvironmentVariable("GIT_COMMITTER_EMAIL"),
                        CommitterName = _environment.GetEnvironmentVariable("GIT_COMMITTER_NAME"),
-                       // TODO: Find a way to retrieve commit message
                    },
-                   Branch = _environment.GetEnvironmentVariable("GIT_BRANCH")
+                   Branch = GetBranch()
                }
            };
-   
-           try
-           {
-               var repositoryUrl = _environment.GetEnvironmentVariable("GIT_URL");
-               var repositoryName = Regex.Match(repositoryUrl, @"^.*\/([^\/]+?).git$").Groups[1].Value;
-               if (!string.IsNullOrEmpty(repositoryName))
-               {
-                   job.GitInformation.Remotes.Add(new Remote(repositoryName, repositoryUrl));
-               }
-           }
-           catch (Exception)
-           {
-               // ignored
-           }
-   
+
            return job;
+       }
+
+       private string? GetBranch()
+       {
+           var branch = _environment.GetEnvironmentVariable("GIT_BRANCH");
+
+           return branch != null && branch.Contains('/') ? branch.Split('/')[1] : branch;
        }
    } 
 }

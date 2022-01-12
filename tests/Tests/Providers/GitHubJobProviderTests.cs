@@ -1,9 +1,9 @@
-using coveralls_uploader.JobProviders;
+using coveralls_uploader.Providers;
 using coveralls_uploader.Utilities;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests.JobProviders;
+namespace Tests.Providers;
 
 public class GitHubJobProviderTests
 {
@@ -37,12 +37,7 @@ public class GitHubJobProviderTests
             "GITHUB_TOKEN",
             "GITHUB_RUN_NUMBER", 
             "GITHUB_RUN_ID",
-            "GITHUB_SHA", 
-            "GIT_COMMIT_AUTHOR_EMAIL",
-            "GIT_COMMIT_AUTHOR_NAME", 
-            "GIT_COMMIT_COMMITTER_EMAIL",
-            "GIT_COMMIT_COMMITTER_NAME",
-            "GIT_COMMIT_MESSAGE_BODY", 
+            "GITHUB_SHA",
             "GITHUB_REF", 
             "COVERALLS_PULL_REQUEST_NUMBER"
         };
@@ -65,13 +60,7 @@ public class GitHubJobProviderTests
             Assert.AreEqual("GITHUB_RUN_ID_VALUE", job.ServiceJobId);
             Assert.AreEqual("COVERALLS_PULL_REQUEST_NUMBER_VALUE", job.ServicePullRequest);
             Assert.AreEqual("GITHUB_SHA_VALUE", job.CommitSha);
-            Assert.AreEqual("GITHUB_SHA_VALUE", job.GitInformation.Head.Id);
-            Assert.AreEqual("GIT_COMMIT_AUTHOR_EMAIL_VALUE", job.GitInformation.Head.AuthorEmail);
-            Assert.AreEqual("GIT_COMMIT_AUTHOR_NAME_VALUE", job.GitInformation.Head.AuthorName);
-            Assert.AreEqual("GIT_COMMIT_COMMITTER_EMAIL_VALUE", job.GitInformation.Head.CommitterEmail);
-            Assert.AreEqual("GIT_COMMIT_COMMITTER_NAME_VALUE", job.GitInformation.Head.CommitterName);
-            Assert.AreEqual("GIT_COMMIT_MESSAGE_BODY_VALUE", job.GitInformation.Head.Message);
-            Assert.AreEqual("GITHUB_REF_VALUE", job.GitInformation.Branch);
+            Assert.AreEqual("GITHUB_REF_VALUE", job.Git.Branch);
         });
     }
     
@@ -90,13 +79,6 @@ public class GitHubJobProviderTests
             Assert.IsNull(job.ServiceJobId);
             Assert.IsNull(job.CommitSha);
             Assert.IsNull(job.ServicePullRequest);
-            Assert.IsNull(job.GitInformation.Head.Id);
-            Assert.IsNull(job.GitInformation.Head.AuthorEmail);
-            Assert.IsNull(job.GitInformation.Head.AuthorName);
-            Assert.IsNull(job.GitInformation.Head.CommitterEmail);
-            Assert.IsNull(job.GitInformation.Head.CommitterName);
-            Assert.IsNull(job.GitInformation.Head.Message);
-            Assert.IsNull(job.GitInformation.Branch);
         });
     }
 }

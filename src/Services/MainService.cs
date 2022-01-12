@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using coveralls_uploader.JobProviders;
 using coveralls_uploader.Models;
 using coveralls_uploader.Parsers;
+using coveralls_uploader.Providers;
 using Serilog;
 
 namespace coveralls_uploader.Services
@@ -13,6 +13,7 @@ namespace coveralls_uploader.Services
         private readonly IParser _parser;
         private readonly ILogger _logger;
         private readonly EnvironmentVariablesJobProviderFactory _environmentVariablesJobProviderFactory;
+        private readonly GitDataProviderFactory _gitDataProviderFactory;
 
         public MainService()
         {
@@ -23,13 +24,15 @@ namespace coveralls_uploader.Services
             CoverallsService coverallsService,
             IParser parser,
             ILogger logger,
-            EnvironmentVariablesJobProviderFactory environmentVariablesJobProviderFactory)
+            EnvironmentVariablesJobProviderFactory environmentVariablesJobProviderFactory,
+            GitDataProviderFactory gitDataProviderFactory)
         {
             _sourceFileService = sourceFileService;
             _coverallsService = coverallsService;
             _parser = parser;
             _logger = logger;
             _environmentVariablesJobProviderFactory = environmentVariablesJobProviderFactory;
+            _gitDataProviderFactory = gitDataProviderFactory;
         }
         
         public virtual async Task RunAsync(CommandOptions commandOptions)
@@ -44,8 +47,13 @@ namespace coveralls_uploader.Services
             var sourceFiles = await _sourceFileService.CreateManyAsync(fileCoverages, commandOptions);
 
             _logger.Information("Fetching job data...");
+
             var environmentVariablesJobProvider = _environmentVariablesJobProviderFactory.Create();
             var job = environmentVariablesJobProvider.Load();
+            
+            var gitDataProvider = _gitDataProviderFactory.Create();
+            job.Git.Merge(gitDataProvider.Load(job.CommitSha));
+            
             job.SourceFiles = sourceFiles;
             job.RepositoryToken = commandOptions.Token ?? job.RepositoryToken;
         

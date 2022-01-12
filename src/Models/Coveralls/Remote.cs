@@ -1,4 +1,4 @@
-﻿namespace coveralls_uploader.Models.Coveralls.Git
+﻿namespace coveralls_uploader.Models.Coveralls
 {
     public class Remote
     {

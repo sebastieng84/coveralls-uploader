@@ -1,6 +1,6 @@
 using coveralls_uploader.Models.Coveralls;
 
-namespace coveralls_uploader.JobProviders
+namespace coveralls_uploader.Providers
 {
     public interface IEnvironmentVariablesJobProvider
     {

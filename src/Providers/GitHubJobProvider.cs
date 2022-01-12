@@ -1,8 +1,7 @@
 using coveralls_uploader.Models.Coveralls;
-using coveralls_uploader.Models.Coveralls.Git;
 using coveralls_uploader.Utilities;
 
-namespace coveralls_uploader.JobProviders
+namespace coveralls_uploader.Providers
 {
     public class GitHubJobProvider : IEnvironmentVariablesJobProvider
     {
@@ -29,18 +28,8 @@ namespace coveralls_uploader.JobProviders
                 ServiceJobId = _environment.GetEnvironmentVariable("GITHUB_RUN_ID"),
                 ServicePullRequest = _environment.GetEnvironmentVariable("COVERALLS_PULL_REQUEST_NUMBER"),
                 CommitSha = _environment.GetEnvironmentVariable("GITHUB_SHA"),
-                GitInformation = new GitInformation
+                Git = new Git
                 {
-                    Head = new Head
-                    {
-                        Id = _environment.GetEnvironmentVariable("GITHUB_SHA"),
-                        AuthorEmail = _environment.GetEnvironmentVariable("GIT_COMMIT_AUTHOR_EMAIL"),
-                        AuthorName = _environment.GetEnvironmentVariable("GIT_COMMIT_AUTHOR_NAME"),
-                        CommitterEmail = _environment.GetEnvironmentVariable("GIT_COMMIT_COMMITTER_EMAIL"),
-                        CommitterName = _environment.GetEnvironmentVariable("GIT_COMMIT_COMMITTER_NAME"),
-                        Message = _environment.GetEnvironmentVariable("GIT_COMMIT_MESSAGE_BODY")
-                    },
-                    // TODO: Add Remotes 
                     Branch = _environment.GetEnvironmentVariable("GITHUB_REF")
                 }
             };

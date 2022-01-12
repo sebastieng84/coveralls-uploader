@@ -1,10 +1,9 @@
-using System.Linq;
-using coveralls_uploader.JobProviders;
+using coveralls_uploader.Providers;
 using coveralls_uploader.Utilities;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests.JobProviders;
+namespace Tests.Providers;
 
 public class JenkinsJobProviderTests
 {
@@ -63,50 +62,15 @@ public class JenkinsJobProviderTests
             Assert.AreEqual("BUILD_NUMBER_VALUE", job.ServiceNumber);
             Assert.AreEqual("COVERALLS_PULL_REQUEST_NUMBER_VALUE", job.ServicePullRequest);
             Assert.AreEqual("GIT_COMMIT_VALUE", job.CommitSha);
-            Assert.AreEqual("GIT_COMMIT_VALUE", job.GitInformation.Head.Id);
-            Assert.AreEqual("GIT_AUTHOR_EMAIL_VALUE", job.GitInformation.Head.AuthorEmail);
-            Assert.AreEqual("GIT_AUTHOR_NAME_VALUE", job.GitInformation.Head.AuthorName);
-            Assert.AreEqual("GIT_COMMITTER_EMAIL_VALUE", job.GitInformation.Head.CommitterEmail);
-            Assert.AreEqual("GIT_COMMITTER_NAME_VALUE", job.GitInformation.Head.CommitterName);
-            Assert.AreEqual("GIT_BRANCH_VALUE", job.GitInformation.Branch);
+            Assert.AreEqual("GIT_COMMIT_VALUE", job.Git.Head.Id);
+            Assert.AreEqual("GIT_AUTHOR_EMAIL_VALUE", job.Git.Head.AuthorEmail);
+            Assert.AreEqual("GIT_AUTHOR_NAME_VALUE", job.Git.Head.AuthorName);
+            Assert.AreEqual("GIT_COMMITTER_EMAIL_VALUE", job.Git.Head.CommitterEmail);
+            Assert.AreEqual("GIT_COMMITTER_NAME_VALUE", job.Git.Head.CommitterName);
+            Assert.AreEqual("GIT_BRANCH_VALUE", job.Git.Branch);
         });
     }
-    
-    [TestCase("https://github.com/user/test.git")]
-    [TestCase("git@github.com:user/test.git")]
-    public void WhenILoad_WithAValidGitUrl_TheItCreatesAValidRemote(string gitUrl)
-    {
-        // Arrange
-        const string repositoryName = "test";
 
-        _environmentWrapperMock
-            .Setup(wrapper => wrapper.GetEnvironmentVariable("GIT_URL"))
-            .Returns(gitUrl);
-        
-        // Act
-        var job = _sut.Load();
-        
-        // Assert
-        Assert.AreEqual(repositoryName, job.GitInformation.Remotes.First().Name);
-        Assert.AreEqual(gitUrl, job.GitInformation.Remotes.First().Url);
-    }
-    
-    [TestCase("https://github.com/user/test")]
-    [TestCase("user.test.git")]
-    public void WhenILoad_WithAnInvalidGitUrl_TheItDoesNotCreateARemote(string gitUrl)
-    {
-        // Arrange
-        _environmentWrapperMock
-            .Setup(wrapper => wrapper.GetEnvironmentVariable("GIT_URL"))
-            .Returns(gitUrl);
-        
-        // Act
-        var job = _sut.Load();
-        
-        // Assert
-        Assert.IsEmpty(job.GitInformation.Remotes);
-    }
-    
     [Test]
     public void WhenILoad_AndEnvironmentVariablesAreNotSet_TheItReturnsNullValues()
     {
@@ -122,13 +86,13 @@ public class JenkinsJobProviderTests
             Assert.IsNull(job.ServiceJobId);
             Assert.IsNull(job.CommitSha);
             Assert.IsNull(job.ServicePullRequest);
-            Assert.IsNull(job.GitInformation.Head.Id);
-            Assert.IsNull(job.GitInformation.Head.AuthorEmail);
-            Assert.IsNull(job.GitInformation.Head.AuthorName);
-            Assert.IsNull(job.GitInformation.Head.CommitterEmail);
-            Assert.IsNull(job.GitInformation.Head.CommitterName);
-            Assert.IsNull(job.GitInformation.Head.Message);
-            Assert.IsNull(job.GitInformation.Branch);
+            Assert.IsNull(job.Git.Head.Id);
+            Assert.IsNull(job.Git.Head.AuthorEmail);
+            Assert.IsNull(job.Git.Head.AuthorName);
+            Assert.IsNull(job.Git.Head.CommitterEmail);
+            Assert.IsNull(job.Git.Head.CommitterName);
+            Assert.IsNull(job.Git.Head.Message);
+            Assert.IsNull(job.Git.Branch);
         });
     }
 }
