@@ -4,20 +4,28 @@ on:
     branches:
       - master
   pull_request:
+    types: [opened, synchronize, reopened]
 env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout for push event
+        uses: actions/checkout@v2
+        if: github.event_name == 'push'
+      - name: Checkout for pull_request event
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+        if: github.event_name == 'pull_request'
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '6.0.x'
       - name: Setup dotCover
         run: dotnet tool install JetBrains.dotCover.GlobalTool -g
       - name: Setup coveralls-uploader
-        run: dotnet tool install --global coveralls-uploader --version 0.5.4
+        run: dotnet tool install --global coveralls-uploader --version 0.5.5
       - name: Run dotCover coverage
         run: dotnet dotcover test --dcXML="dotcover.xml"
       - name: Conver to lcov format
