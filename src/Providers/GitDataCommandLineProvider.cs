@@ -49,9 +49,9 @@ namespace coveralls_uploader.Providers
 
         private Head GetHead(string commitSha)
         {
-            const char separator = '|';
+            const char separator = '\n';
             var gitShowCommand =
-                $"git show -q --pretty=\"\"\"%an{separator}%ae{separator}%cn{separator}%ce{separator}%s\"\"\" {commitSha}";
+                $"git show -q --pretty=\"\"\"%H{separator}%an{separator}%ae{separator}%cn{separator}%ce{separator}%s\"\"\" {commitSha}";
             
             if (!TryRunCommandLine(gitShowCommand, out var commandOutput))
             {
@@ -61,12 +61,12 @@ namespace coveralls_uploader.Providers
             var values = commandOutput.Split(separator);
             var head = new Head
             {
-                Id = commitSha,
-                AuthorName = values.ElementAtOrDefault(0),
-                AuthorEmail = values.ElementAtOrDefault(1),
-                CommitterName = values.ElementAtOrDefault(2),
-                CommitterEmail = values.ElementAtOrDefault(3),
-                Message = values.ElementAtOrDefault(4),
+                Id = commitSha ?? values.ElementAtOrDefault(0),
+                AuthorName = values.ElementAtOrDefault(1),
+                AuthorEmail = values.ElementAtOrDefault(2),
+                CommitterName = values.ElementAtOrDefault(3),
+                CommitterEmail = values.ElementAtOrDefault(4),
+                Message = values.ElementAtOrDefault(5),
             };
 
             return head;
