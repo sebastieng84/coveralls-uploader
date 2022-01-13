@@ -16,7 +16,7 @@ namespace coveralls_uploader.Providers
         
         protected abstract string ArgumentsPrefix { get; }
         protected abstract string CommandLineFileName { get; }
-        
+
         protected GitDataCommandLineProvider(ILogger logger)
         {
             _logger = logger;
@@ -51,18 +51,14 @@ namespace coveralls_uploader.Providers
         {
             const char separator = '|';
             var gitShowCommand =
-                $"git show -q --pretty=\"\"%an{separator}%ae{separator}%cn{separator}%ce{separator}%s\"\" {commitSha}";
-
-            _logger.Debug("Running the following command: {Command}", gitShowCommand);
+                $"git show -q --pretty=\"\"\"%an{separator}%ae{separator}%cn{separator}%ce{separator}%s\"\"\" {commitSha}";
+            
             if (!TryRunCommandLine(gitShowCommand, out var commandOutput))
             {
                 return null;
             }
             
-            _logger.Debug("Command output: {CommandOutput}", commandOutput);
-
-            var values = commandOutput.Split('|');
-
+            var values = commandOutput.Split(separator);
             var head = new Head
             {
                 Id = commitSha,
@@ -72,7 +68,7 @@ namespace coveralls_uploader.Providers
                 CommitterEmail = values.ElementAtOrDefault(3),
                 Message = values.ElementAtOrDefault(4),
             };
-            _logger.Debug("Head: @{Head}", head);
+
             return head;
         }
 
@@ -97,33 +93,55 @@ namespace coveralls_uploader.Providers
 
         private bool TryRunCommandLine(string arguments, out string output)
         {
+            output = string.Empty;
+            
             var process = new Process();
-            process.StartInfo = new(CommandLineFileName, $"{ArgumentsPrefix} \"{arguments}\"")
+            process.StartInfo = new ProcessStartInfo(CommandLineFileName, $"{ArgumentsPrefix} \"{arguments}\"")
             {
                 CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden,
                 UseShellExecute = false,
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,
+                StandardOutputEncoding = Encoding.UTF8,
                 WorkingDirectory = Directory.GetCurrentDirectory()
             };
             
             var standardOutput = new StringBuilder();
             process.OutputDataReceived += (_, args) => standardOutput.AppendLine(args.Data);
-                
+
             try
             {
+                _logger.Debug(
+                    "Running command line: {FileName} {arguments}",
+                    process.StartInfo.FileName, 
+                    process.StartInfo.Arguments);
                 process.Start();
                 process.BeginOutputReadLine();
                 process.WaitForExit();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                output = string.Empty;
+                _logger.Error(
+                    exception,
+                    "An error occured");
+                
+                return false;
+            }
+
+            if (process.ExitCode != 0)
+            {
+                _logger.Warning(
+                    "Command line terminated with exit code {ExitCode}", 
+                    process.ExitCode);
+                
                 return false;
             }
 
             output = standardOutput.ToString();
+            _logger.Debug(
+                "Command line output: {CommandOutput}",
+                output);
             return true;
         }
     }
