@@ -59,7 +59,7 @@ public class GitHubJobProviderTests
             Assert.AreEqual("GITHUB_RUN_NUMBER_VALUE", job.ServiceNumber);
             Assert.AreEqual("GITHUB_RUN_ID_VALUE", job.ServiceJobId);
             Assert.AreEqual("COVERALLS_PULL_REQUEST_NUMBER_VALUE", job.ServicePullRequest);
-            Assert.AreEqual("GITHUB_SHA_VALUE", job.CommitSha);
+            //Assert.AreEqual("GITHUB_SHA_VALUE", job.CommitSha);
             Assert.AreEqual("GITHUB_REF_VALUE", job.Git.Branch);
         });
     }

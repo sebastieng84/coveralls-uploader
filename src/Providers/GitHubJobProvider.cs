@@ -27,7 +27,7 @@ namespace coveralls_uploader.Providers
                 ServiceNumber = _environment.GetEnvironmentVariable("GITHUB_RUN_NUMBER"),
                 ServiceJobId = _environment.GetEnvironmentVariable("GITHUB_RUN_ID"),
                 ServicePullRequest = _environment.GetEnvironmentVariable("COVERALLS_PULL_REQUEST_NUMBER"),
-                CommitSha = _environment.GetEnvironmentVariable("GITHUB_SHA"),
+                //CommitSha = _environment.GetEnvironmentVariable("GITHUB_SHA"),
                 Git = new Git
                 {
                     Branch = _environment.GetEnvironmentVariable("GITHUB_REF")
