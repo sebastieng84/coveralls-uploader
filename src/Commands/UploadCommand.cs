@@ -31,7 +31,7 @@ namespace coveralls_uploader.Commands
                 new[] {"--token", "-t"},
                 "The repository token.")
             {
-                Arity = ArgumentArity.ZeroOrOne,
+                Arity = ArgumentArity.ZeroOrOne
             });
             AddOption(new Option<bool>(
                 new[] {"--source", "-s"},

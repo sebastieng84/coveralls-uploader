@@ -12,14 +12,11 @@ namespace coveralls_uploader.Models
             {
                 return Array.Empty<int?>();
             }
-            
+
             var maxValue = Keys.Max(key => key);
-            
+
             var lineCoverageArray = new int?[maxValue];
-            foreach (var key in Keys)
-            {
-                lineCoverageArray[key - 1] = this[key];
-            }
+            foreach (var key in Keys) lineCoverageArray[key - 1] = this[key];
 
             return lineCoverageArray;
         }

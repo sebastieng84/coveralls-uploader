@@ -1,3 +1,4 @@
+using coveralls_uploader.Utilities;
 using Serilog;
 
 namespace coveralls_uploader.Providers
@@ -7,7 +8,9 @@ namespace coveralls_uploader.Providers
         protected override string ArgumentsPrefix => "/C";
         protected override string CommandLineFileName => "cmd.exe";
 
-        public WindowsGitDataCommandLineProvider(ILogger logger) : base(logger)
+        public WindowsGitDataCommandLineProvider(
+            ILogger logger,
+            ProcessFactory processFactory) : base(logger, processFactory)
         {
         }
     }

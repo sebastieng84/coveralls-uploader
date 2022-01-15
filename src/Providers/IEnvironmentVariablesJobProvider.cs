@@ -6,5 +6,5 @@ namespace coveralls_uploader.Providers
     {
         public string ServiceName { get; }
         Job Load();
-    } 
+    }
 }

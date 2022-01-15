@@ -8,7 +8,7 @@ namespace coveralls_uploader.Models
         {
             var array = new int[Count * 4];
             var index = 0;
-            foreach(var branchCoverage in this)
+            foreach (var branchCoverage in this)
             {
                 array[index++] = branchCoverage.LineNumber;
                 array[index++] = branchCoverage.BlockNumber;

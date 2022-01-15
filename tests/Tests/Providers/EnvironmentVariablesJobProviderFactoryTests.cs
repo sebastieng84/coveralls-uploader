@@ -1,6 +1,6 @@
 using System;
 using coveralls_uploader.Providers;
-using coveralls_uploader.Utilities;
+using coveralls_uploader.Utilities.Wrappers;
 using Microsoft.Extensions.Hosting;
 using Moq;
 using NUnit.Framework;
@@ -12,7 +12,7 @@ public class EnvironmentVariablesJobProviderFactoryTests
     private EnvironmentVariablesJobProviderFactory _sut;
 
     private Mock<IHost> _hostMock;
-    private Mock<IEnvironmentWrapper> _environmentWrapperMock;
+    private Mock<IEnvironment> _environmentWrapperMock;
 
     [SetUp]
     public void Setup()

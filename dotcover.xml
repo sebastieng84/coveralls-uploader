@@ -10,6 +10,9 @@
             <FilterEntry>
                 <ModuleMask>*Tests*</ModuleMask>
             </FilterEntry>
+            <FilterEntry>
+                <ClassMask>coveralls_uploader.Utilities.Wrappers.*</ClassMask>
+            </FilterEntry>
         </ExcludeFilters>
     </Filters>
     <AttributeFilters>

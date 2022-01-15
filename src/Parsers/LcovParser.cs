@@ -14,28 +14,28 @@ namespace coveralls_uploader.Parsers
         private const string LineCoveragePattern = "^DA:(\\d+),(\\d+)";
         private const string BranchCoveragePattern = "^BRDA:(\\d+),(\\d+),(\\d+),(\\d+)";
         private const string SourceFilePattern = "^SF:(.*)";
-        
+
         private readonly Dictionary<string, FileCoverage> _sourceFileCoverageByFile = new();
-        
+
         public IList<FileCoverage> Parse(FileInfo fileInfo)
         {
             ValidateFileExtension(fileInfo.FullName);
-            
+
             FileCoverage currentFileCoverage = null;
-            
+
             foreach (var line in File.ReadLines(fileInfo.FullName))
             {
                 if (Regex.Match(line, SourceFilePattern) is var sourceFileMatch && sourceFileMatch.Success)
                 {
                     currentFileCoverage = GetOrAddFileCoverage(sourceFileMatch);
-                    
+
                     continue;
                 }
-                
+
                 if (Regex.Match(line, LineCoveragePattern) is var lineMatch && lineMatch.Success)
                 {
                     AddLineCoverage(lineMatch, currentFileCoverage!);
-                    
+
                     continue;
                 }
 
@@ -51,12 +51,12 @@ namespace coveralls_uploader.Parsers
         private FileCoverage GetOrAddFileCoverage(Match match)
         {
             var fileName = match.Groups[1].Value;
-            
+
             if (_sourceFileCoverageByFile.TryGetValue(fileName, out var fileCoverage))
             {
                 return fileCoverage;
             }
-            
+
             fileCoverage = new FileCoverage(fileName);
             _sourceFileCoverageByFile.Add(fileName, fileCoverage);
 
@@ -67,7 +67,7 @@ namespace coveralls_uploader.Parsers
         {
             var lineNumber = int.Parse(match.Groups[1].Value);
             var hitCount = int.Parse(match.Groups[2].Value);
-                    
+
             fileCoverage.CoverageByLine[lineNumber] = hitCount;
         }
 
