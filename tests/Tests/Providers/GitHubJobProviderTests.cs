@@ -1,5 +1,5 @@
 using coveralls_uploader.Providers;
-using coveralls_uploader.Utilities;
+using coveralls_uploader.Utilities.Wrappers;
 using Moq;
 using NUnit.Framework;
 
@@ -8,12 +8,12 @@ namespace Tests.Providers;
 public class GitHubJobProviderTests
 {
     private GitHubJobProvider _sut;
-    private Mock<IEnvironmentWrapper> _environmentWrapperMock;
+    private Mock<IEnvironment> _environmentWrapperMock;
 
     [SetUp]
-    public void Setup()
+    protected void Setup()
     {
-        _environmentWrapperMock = new Mock<IEnvironmentWrapper>();
+        _environmentWrapperMock = new Mock<IEnvironment>();
         _sut = new GitHubJobProvider(_environmentWrapperMock.Object);
     }
 

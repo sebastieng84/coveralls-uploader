@@ -1,9 +1,8 @@
 #nullable enable
-namespace coveralls_uploader.Utilities
+namespace coveralls_uploader.Utilities.Wrappers
 {
-    public interface IEnvironmentWrapper
+    public interface IEnvironment
     {
         public string? GetEnvironmentVariable(string variable);
     }
 }
-

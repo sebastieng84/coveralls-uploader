@@ -1,4 +1,5 @@
 using coveralls_uploader.Utilities;
+using coveralls_uploader.Utilities.Wrappers;
 using NUnit.Framework;
 
 namespace Tests.Utilities;

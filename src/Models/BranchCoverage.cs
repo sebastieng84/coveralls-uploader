@@ -10,9 +10,10 @@
         public BranchCoverage()
         {
         }
+
         public BranchCoverage(
-            int lineNumber, 
-            int blockNumber, 
+            int lineNumber,
+            int blockNumber,
             int branchNumber,
             int hitCount)
         {
@@ -21,6 +22,5 @@
             BranchNumber = branchNumber;
             HitCount = hitCount;
         }
-
     }
 }

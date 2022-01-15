@@ -4,6 +4,7 @@ using System.Net.Http;
 using coveralls_uploader.Parsers;
 using coveralls_uploader.Providers;
 using coveralls_uploader.Services;
+using coveralls_uploader.Utilities.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -15,7 +16,7 @@ namespace coveralls_uploader.Utilities
     public static class HostBuilderExtensions
     {
         public static IHostBuilder AddServices(
-            this IHostBuilder hostBuilder, 
+            this IHostBuilder hostBuilder,
             LoggingLevelSwitch loggingLevelSwitch)
         {
             hostBuilder.ConfigureServices(services =>
@@ -26,7 +27,8 @@ namespace coveralls_uploader.Utilities
                     .AddTransient<IFileSystem, FileSystem>()
                     .AddTransient<IParser, LcovParser>()
                     .AddTransient<IEnvironmentVariablesJobProvider, GitHubJobProvider>()
-                    .AddTransient<IEnvironmentWrapper, EnvironmentWrapper>()
+                    .AddTransient<IEnvironment, EnvironmentWrapper>()
+                    .AddTransient<IRuntimeInformation, RuntimeInformationWrapper>()
                     .AddTransient<MainService>()
                     .AddTransient<CoverallsService>()
                     .AddTransient<SourceFileService>()
@@ -34,7 +36,11 @@ namespace coveralls_uploader.Utilities
                     .AddTransient<EnvironmentVariablesJobProviderFactory>()
                     .AddTransient<JenkinsJobProvider>()
                     .AddTransient<GitHubJobProvider>()
-                    .AddTransient<GitDataProviderFactory>();
+                    .AddTransient<GitDataProviderFactory>()
+                    .AddTransient<ProcessFactory>()
+                    .AddTransient<OsxGitDataCommandLineProvider>()
+                    .AddTransient<WindowsGitDataCommandLineProvider>()
+                    .AddTransient<LinuxGitDataCommandLineProvider>();
             });
 
             return hostBuilder;

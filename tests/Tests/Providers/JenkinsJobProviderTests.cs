@@ -1,5 +1,5 @@
 using coveralls_uploader.Providers;
-using coveralls_uploader.Utilities;
+using coveralls_uploader.Utilities.Wrappers;
 using Moq;
 using NUnit.Framework;
 
@@ -8,12 +8,12 @@ namespace Tests.Providers;
 public class JenkinsJobProviderTests
 {
     private JenkinsJobProvider _sut;
-    private Mock<IEnvironmentWrapper> _environmentWrapperMock;
+    private Mock<IEnvironment> _environmentWrapperMock;
 
     [SetUp]
-    public void Setup()
+    protected void Setup()
     {
-        _environmentWrapperMock = new Mock<IEnvironmentWrapper>();
+        _environmentWrapperMock = new Mock<IEnvironment>();
         _sut = new JenkinsJobProvider(_environmentWrapperMock.Object);
     }
 
@@ -94,5 +94,23 @@ public class JenkinsJobProviderTests
             Assert.IsNull(job.Git.Head.Message);
             Assert.IsNull(job.Git.Branch);
         });
+    }
+    
+    [TestCase("origin/dev", "dev")]
+    [TestCase("origin/dev/tests", "dev/tests")]
+    public void WhenILoad_AndGitBranchIsARemoteBranch_TheItReturnsTheLocalBranch(
+        string branch, 
+        string expectedBranch)
+    {
+        // Arrange
+        _environmentWrapperMock
+            .Setup(wrapper => wrapper.GetEnvironmentVariable("GIT_BRANCH"))
+            .Returns(branch);
+        
+        // Act
+        var job = _sut.Load();
+        
+        // Assert
+        Assert.AreEqual(expectedBranch, job.Git.Branch);
     }
 }

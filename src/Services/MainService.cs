@@ -6,7 +6,7 @@ using Serilog;
 
 namespace coveralls_uploader.Services
 {
-    public class MainService 
+    public class MainService
     {
         private readonly SourceFileService _sourceFileService;
         private readonly CoverallsService _coverallsService;
@@ -18,7 +18,7 @@ namespace coveralls_uploader.Services
         public MainService()
         {
         }
-        
+
         public MainService(
             SourceFileService sourceFileService,
             CoverallsService coverallsService,
@@ -34,13 +34,13 @@ namespace coveralls_uploader.Services
             _environmentVariablesJobProviderFactory = environmentVariablesJobProviderFactory;
             _gitDataProviderFactory = gitDataProviderFactory;
         }
-        
+
         public virtual async Task RunAsync(CommandOptions commandOptions)
         {
             _logger.Information(
-                "Parsing the input file {Input}", 
+                "Parsing the input file {Input}",
                 commandOptions.Input);
-        
+
             var fileCoverages = _parser.Parse(commandOptions.Input);
 
             _logger.Information("Converting FileCoverage to SourceFile...");
@@ -50,13 +50,13 @@ namespace coveralls_uploader.Services
 
             var environmentVariablesJobProvider = _environmentVariablesJobProviderFactory.Create();
             var job = environmentVariablesJobProvider.Load();
-            
+
             var gitDataProvider = _gitDataProviderFactory.Create();
             job.Git.Merge(gitDataProvider.Load(job.CommitSha));
-            
+
             job.SourceFiles = sourceFiles;
             job.RepositoryToken = commandOptions.Token ?? job.RepositoryToken;
-        
+
             await _coverallsService.UploadAsync(job);
         }
     }

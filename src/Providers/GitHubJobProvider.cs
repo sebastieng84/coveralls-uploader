@@ -1,5 +1,6 @@
 using coveralls_uploader.Models.Coveralls;
 using coveralls_uploader.Utilities;
+using coveralls_uploader.Utilities.Wrappers;
 
 namespace coveralls_uploader.Providers
 {
@@ -7,13 +8,13 @@ namespace coveralls_uploader.Providers
     {
         public string ServiceName => "github";
 
-        private readonly IEnvironmentWrapper _environment;
+        private readonly IEnvironment _environment;
 
         public GitHubJobProvider()
         {
         }
-    
-        public GitHubJobProvider(IEnvironmentWrapper environment)
+
+        public GitHubJobProvider(IEnvironment environment)
         {
             _environment = environment;
         }

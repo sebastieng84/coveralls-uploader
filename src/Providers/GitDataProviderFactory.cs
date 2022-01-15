@@ -1,35 +1,40 @@
 using System;
-using System.IO.Abstractions;
 using System.Runtime.InteropServices;
-using Serilog;
+using coveralls_uploader.Utilities.Wrappers;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace coveralls_uploader.Providers
 {
     public class GitDataProviderFactory
     {
-        private readonly ILogger _logger;
+        private readonly IHost _host;
+        private readonly IRuntimeInformation _runtimeInformation;
 
-        public GitDataProviderFactory(ILogger logger)
+        public GitDataProviderFactory(IHost host, IRuntimeInformation runtimeInformation)
         {
-            _logger = logger;
+            _host = host;
+            _runtimeInformation = runtimeInformation;
         }
-        
+
         public IGitDataProvider Create()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (_runtimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                return new LinuxGitDataCommandLineProvider(_logger);
-            }
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                return new OsxGitDataCommandLineProvider(_logger);
-            }
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return new WindowsGitDataCommandLineProvider(_logger);
+                return _host.Services.GetRequiredService<LinuxGitDataCommandLineProvider>();
             }
 
-            throw new ArgumentOutOfRangeException(nameof(OSPlatform));
+            if (_runtimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return _host.Services.GetRequiredService<OsxGitDataCommandLineProvider>();
+            }
+
+            if (_runtimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return _host.Services.GetRequiredService<WindowsGitDataCommandLineProvider>();
+            }
+
+            throw new PlatformNotSupportedException();
         }
     }
 }
