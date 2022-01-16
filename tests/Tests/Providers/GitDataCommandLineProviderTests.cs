@@ -24,21 +24,22 @@ public class GitDataCommandLineProviderTests
         _sut = new GitDataCommandLineProvider(_loggerMock.Object, _commandLineHelperMock.Object);
     }
 
-    private static IEnumerable<TestCaseData> GetBranchTestCases()
-    {
-        yield return new TestCaseData("* test\n  master\n  test2\n", "test");
-        yield return new TestCaseData("  master\n* test\n  test2\n", "test");
-        yield return new TestCaseData("  test\n  master\n  test2\n", null);
-        yield return new TestCaseData(new Guid().ToString(), null);
-        yield return new TestCaseData(string.Empty, null);
-    }
-    
     private static IEnumerable<TestCaseData> GetRemotesTestCases()
     {
         yield return new TestCaseData(
             "origin  https://github.com/user/test.git (fetch)\norigin  https://github.com/user/test.git (push)\n",
-            new List<Remote> {new("origin", "https://github.com/user/test.git")});
-        yield return new TestCaseData("", new List<Remote>());
+            new List<Remote>
+            {
+                new("origin", "https://github.com/user/test.git")
+            });
+        yield return new TestCaseData(
+            "test1  url1 (fetch)\n test2  url2 (push)\n test3  url3 (fetch)\ntest4  url4 (push)\n",
+            new List<Remote>
+            {
+                new("test1", "url1"), 
+                new("test3", "url3")
+            });
+        yield return new TestCaseData(new Guid().ToString(), new List<Remote>());
         yield return new TestCaseData(string.Empty, new List<Remote>());
     }
 
@@ -58,8 +59,10 @@ public class GitDataCommandLineProviderTests
         Assert.IsNull(branch);
     }
     
-    [TestCaseSource(nameof(GetBranchTestCases))]
-    public void WhenIGetBranch_ThenItReturnsTheCurrentBranch(
+    [TestCase("test", "test")]
+    [TestCase("  test  ", "test")]
+    [TestCase("", null)]
+    public void WhenIGetBranch_ReturnsTheCurrentBranch(
         string output,
         string expectedBranch)
     {

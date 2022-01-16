@@ -30,17 +30,11 @@ namespace coveralls_uploader.Providers
 
         public string GetBranch()
         {
-            const string branchPattern = @"(?m)^\* (\w+)";
-            const string gitBranchCommand = "git branch";
+            const string gitBranchCommand = "git branch --show-current";
 
-            if (!_commandLineHelper.TryRun(gitBranchCommand, out var commandOutput))
-            {
-                return null;
-            }
-
-            var match = Regex.Match(commandOutput, branchPattern);
-
-            return match.Success ? match.Groups[1].Value : null;
+            _commandLineHelper.TryRun(gitBranchCommand, out var commandOutput);
+            
+            return commandOutput?.Trim().NullIfEmpty();
         }
 
         public Head GetHead(string commitSha)
