@@ -13,7 +13,7 @@ namespace coveralls_uploader.Providers
 
         private readonly IEnvironment _environment = null!;
 
-        public JenkinsJobProvider()
+        protected JenkinsJobProvider()
         {
         }
 

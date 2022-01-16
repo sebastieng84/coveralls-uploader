@@ -24,6 +24,7 @@ namespace coveralls_uploader.Utilities
                 services
                     .AddSingleton(Log.Logger)
                     .AddSingleton(typeof(LoggingLevelSwitch), loggingLevelSwitch)
+                    .AddSingleton<CommandLineHelper>()
                     .AddTransient<IFileSystem, FileSystem>()
                     .AddTransient<IParser, LcovParser>()
                     .AddTransient<IEnvironmentVariablesJobProvider, GitHubJobProvider>()
@@ -36,11 +37,7 @@ namespace coveralls_uploader.Utilities
                     .AddTransient<EnvironmentVariablesJobProviderFactory>()
                     .AddTransient<JenkinsJobProvider>()
                     .AddTransient<GitHubJobProvider>()
-                    .AddTransient<GitDataProviderFactory>()
-                    .AddTransient<ProcessFactory>()
-                    .AddTransient<OsxGitDataCommandLineProvider>()
-                    .AddTransient<WindowsGitDataCommandLineProvider>()
-                    .AddTransient<LinuxGitDataCommandLineProvider>();
+                    .AddTransient<GitDataCommandLineProvider>();
             });
 
             return hostBuilder;
