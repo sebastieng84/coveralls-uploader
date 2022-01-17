@@ -6,12 +6,12 @@ coveralls-uploader is a dotnet tool that allows you to parse a lcov code coverag
 ## Installation
 ### Global tool
 ```
-dotnet tool install --global coveralls-uploader --version 0.4.1
+dotnet tool install --global coveralls-uploader --version 0.6.0
 ```
 ### Local tool
 ```
 dotnet new tool-manifest # if you are setting up this repo
-dotnet tool install --local coveralls-uploader --version 0.4.1
+dotnet tool install --local coveralls-uploader --version 0.6.0
 ```
 
 ## Usage
@@ -27,3 +27,10 @@ Options:
   --version                       Show version information
   -?, -h, --help                  Show help and usage information 
 ```
+
+## TODOs 🗒️
+- Add Decorator to fill environment variables with COVERALLS_* variables
+- Add support for ReportGenerator.Core
+- Add new CI/CD tools support
+- Add support for YAML configuration file for repository token.
+- Add more logs for the verbose option.
