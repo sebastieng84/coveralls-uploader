@@ -13,7 +13,7 @@ namespace coveralls_uploader.Services
         private readonly IParser _parser;
         private readonly ILogger _logger;
         private readonly EnvironmentVariablesJobProviderFactory _environmentVariablesJobProviderFactory;
-        private readonly GitDataProviderFactory _gitDataProviderFactory;
+        private readonly GitDataCommandLineProvider _gitDataCommandLineProvider;
 
         public MainService()
         {
@@ -25,14 +25,14 @@ namespace coveralls_uploader.Services
             IParser parser,
             ILogger logger,
             EnvironmentVariablesJobProviderFactory environmentVariablesJobProviderFactory,
-            GitDataProviderFactory gitDataProviderFactory)
+            GitDataCommandLineProvider gitDataCommandLineProvider)
         {
             _sourceFileService = sourceFileService;
             _coverallsService = coverallsService;
             _parser = parser;
             _logger = logger;
             _environmentVariablesJobProviderFactory = environmentVariablesJobProviderFactory;
-            _gitDataProviderFactory = gitDataProviderFactory;
+            _gitDataCommandLineProvider = gitDataCommandLineProvider;
         }
 
         public virtual async Task RunAsync(CommandOptions commandOptions)
@@ -50,9 +50,8 @@ namespace coveralls_uploader.Services
 
             var environmentVariablesJobProvider = _environmentVariablesJobProviderFactory.Create();
             var job = environmentVariablesJobProvider.Load();
-
-            var gitDataProvider = _gitDataProviderFactory.Create();
-            job.Git.Merge(gitDataProvider.Load(job.CommitSha));
+            
+            job.Git.Merge(_gitDataCommandLineProvider.Load(job.CommitSha));
 
             job.SourceFiles = sourceFiles;
             job.RepositoryToken = commandOptions.Token ?? job.RepositoryToken;

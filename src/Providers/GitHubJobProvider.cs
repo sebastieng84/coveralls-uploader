@@ -10,7 +10,7 @@ namespace coveralls_uploader.Providers
 
         private readonly IEnvironment _environment;
 
-        public GitHubJobProvider()
+        protected GitHubJobProvider()
         {
         }
 
