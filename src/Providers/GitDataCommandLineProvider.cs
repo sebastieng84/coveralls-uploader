@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -30,16 +31,18 @@ namespace coveralls_uploader.Providers
 
         public string GetBranch()
         {
+            const string pattern = @"(?m)^(.+)$";
             const string gitBranchCommand = "git branch --show-current";
 
             _commandLineHelper.TryRun(gitBranchCommand, out var commandOutput);
-            
-            return commandOutput?.Trim().NullIfEmpty();
+            var match = Regex.Match(commandOutput, pattern);
+
+            return match.Success ? match.Value.Trim().TrimEndNewLine() : null;
         }
 
         public Head GetHead(string commitSha)
         {
-            const char separator = '\n';
+            const string separator = "-|::|-";
             var gitShowCommand =
                 $"git show -q --pretty=\"\"\"%H{separator}%an{separator}%ae{separator}%cn" +
                 $"{separator}%ce{separator}%s\"\"\" {commitSha}";
@@ -57,7 +60,7 @@ namespace coveralls_uploader.Providers
                 AuthorEmail = values.ElementAtOrDefault(2),
                 CommitterName = values.ElementAtOrDefault(3),
                 CommitterEmail = values.ElementAtOrDefault(4),
-                Message = values.ElementAtOrDefault(5)
+                Message = values.ElementAtOrDefault(5).TrimEndNewLine()
             };
 
             return head;
@@ -65,14 +68,12 @@ namespace coveralls_uploader.Providers
 
         public IList<Remote> GetRemotes()
         {
-            IList<Remote> remotes = new List<Remote>();
-
             const string gitRemoteCommand = "git remote -v";
             const string remotePattern = @"(?m)^([^\s]+)\s+([^\s]+)\s+\(push\)";
 
             if (!_commandLineHelper.TryRun(gitRemoteCommand, out var commandOutput))
             {
-                return remotes;
+                return new List<Remote>();;
             }
 
             var matches = Regex.Matches(commandOutput, remotePattern);
