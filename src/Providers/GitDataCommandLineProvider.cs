@@ -49,7 +49,7 @@ namespace coveralls_uploader.Providers
 
             if (!_commandLineHelper.TryRun(gitShowCommand, out var commandOutput))
             {
-                return null;
+                return null; lol
             }
 
             var values = commandOutput.Split(separator);
