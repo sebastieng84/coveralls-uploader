@@ -39,12 +39,12 @@ namespace coveralls_uploader.Providers
 
         private bool IsJenkinsEnvironment()
         {
-            return !string.IsNullOrEmpty(_environment.GetEnvironmentVariable(JenkinsEnvironmentVariable));
+            return !_environment.GetEnvironmentVariable(JenkinsEnvironmentVariable).IsNullOrEmpty();
         }
 
         private bool IsGitHubEnvironment()
         {
-            return !string.IsNullOrEmpty(_environment.GetEnvironmentVariable(GitHubEnvironmentVariable));
+            return !_environment.GetEnvironmentVariable(GitHubEnvironmentVariable).IsNullOrEmpty();
         }
     }
 }

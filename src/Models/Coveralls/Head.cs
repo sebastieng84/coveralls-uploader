@@ -1,4 +1,5 @@
 ﻿using System;
+using coveralls_uploader.Utilities;
 using Newtonsoft.Json;
 
 namespace coveralls_uploader.Models.Coveralls

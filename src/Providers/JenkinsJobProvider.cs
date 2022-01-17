@@ -30,7 +30,7 @@ namespace coveralls_uploader.Providers
                 ServiceName = ServiceName,
                 ServiceNumber = _environment.GetEnvironmentVariable("BUILD_NUMBER"),
                 CommitSha = _environment.GetEnvironmentVariable("GIT_COMMIT"),
-                ServicePullRequest = _environment.GetEnvironmentVariable("COVERALLS_PULL_REQUEST_NUMBER"),
+                ServicePullRequest = GetPullRequest(),
                 Git = new Git
                 {
                     Head = new Head
@@ -56,6 +56,12 @@ namespace coveralls_uploader.Providers
 
             const string branchPattern = "^origin/";
             return branch is null ? branch : Regex.Replace(branch, branchPattern, string.Empty);
+        }
+
+        private string? GetPullRequest()
+        {
+            return _environment.GetEnvironmentVariable("CHANGE_ID") ??
+                   _environment.GetEnvironmentVariable("ghprbPullId");
         }
     }
 }
