@@ -177,9 +177,10 @@ public class GitDataCommandLineProviderTests
         var expected = _fixture.Create<Head>();
 
         var output =
-            $"{expected.Id}{Separator}{expected.AuthorName}{Separator}{expected.AuthorEmail}" +
-            $"{Separator}{expected.CommitterName}{Separator}{expected.CommitterEmail}{Separator}" +
-            $"{expected.Message}";
+            $"commit {expected.Id}\n" +
+            $"Author: {expected.AuthorName} <{expected.AuthorEmail}>\n" +
+            $"Commit: {expected.CommitterName} <{expected.CommitterEmail}>\n\n" + 
+            $"    {expected.Message}\r\n";
         
         _commandLineHelperMock
             .Setup(helper => helper.TryRun(It.IsAny<string>(), out output))
@@ -191,7 +192,7 @@ public class GitDataCommandLineProviderTests
         // Assert
         Assert.AreEqual(expected, actual);
     }
-    
+
     [Test]
     public void WhenIGetHead_WithMissingInformation_ThenItDoesNotThrow()
     {
@@ -203,10 +204,11 @@ public class GitDataCommandLineProviderTests
             .Create();
 
         var output =
-            $"{expected.Id}{Separator}{expected.AuthorName}{Separator}{expected.AuthorEmail}" +
-            $"{Separator}{expected.CommitterName}{Separator}{expected.CommitterEmail}{Separator}" +
-            $"{expected.Message}";
-        
+            $"commit {expected.Id}\n" +
+            $"Author: {expected.AuthorName} <{expected.AuthorEmail}>\n" +
+            $"Commit: {expected.CommitterName} <{expected.CommitterEmail}>\n\n" + 
+            $"    {expected.Message}\r\n";
+
         _commandLineHelperMock
             .Setup(helper => helper.TryRun(It.IsAny<string>(), out output))
             .Returns(true);
@@ -231,7 +233,7 @@ public class GitDataCommandLineProviderTests
             .Returns(true);
 
         // Act
-        var actual = _sut.Load(commitSha);
+        _sut.Load(commitSha);
         
         // Assert
         _commandLineHelperMock.Verify(helper => helper.TryRun(It.IsAny<string>(), out output), Times.Exactly(3));

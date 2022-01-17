@@ -37,30 +37,34 @@ namespace coveralls_uploader.Providers
             _commandLineHelper.TryRun(gitBranchCommand, out var commandOutput);
             var match = Regex.Match(commandOutput, pattern);
 
-            return match.Success ? match.Value.Trim().TrimEndNewLine() : null;
+            return match.Success ? match.Value.Trim() : null;
         }
 
         public Head GetHead(string commitSha)
         {
-            const string separator = "-|::|-";
-            var gitShowCommand =
-                $"git show -q --pretty=\"\"\"%H{separator}%an{separator}%ae{separator}%cn" +
-                $"{separator}%ce{separator}%s\"\"\" {commitSha}";
+            const string pattern = 
+                @"commit ([^\s]*).*\r?\n.*\r?\n?Author: (.*?) <([^>]*)>\r?\nCommit: (.*?) <([^>]*)>\r?\n\r?\n\s*([^\r\n]*)";
+            var gitShowCommand = $"git show -q --pretty=full {commitSha}";
 
             if (!_commandLineHelper.TryRun(gitShowCommand, out var commandOutput))
             {
                 return null;
             }
 
-            var values = commandOutput.Split(separator);
+            var match = Regex.Match(commandOutput, pattern);
+            if (!match.Success)
+            {
+                return null;
+            }
+            
             var head = new Head
             {
-                Id = commitSha ?? values.ElementAtOrDefault(0),
-                AuthorName = values.ElementAtOrDefault(1),
-                AuthorEmail = values.ElementAtOrDefault(2),
-                CommitterName = values.ElementAtOrDefault(3),
-                CommitterEmail = values.ElementAtOrDefault(4),
-                Message = values.ElementAtOrDefault(5).TrimEndNewLine()
+                Id = match.Groups.ElementAtOrDefault<Group>(1)?.Value,
+                AuthorName = match.Groups.ElementAtOrDefault<Group>(2)?.Value,
+                AuthorEmail = match.Groups.ElementAtOrDefault<Group>(3)?.Value,
+                CommitterName = match.Groups.ElementAtOrDefault<Group>(4)?.Value,
+                CommitterEmail = match.Groups.ElementAtOrDefault<Group>(5)?.Value,
+                Message = match.Groups.ElementAtOrDefault<Group>(6)?.Value
             };
 
             return head;

@@ -8,10 +8,5 @@ namespace coveralls_uploader.Utilities
         {
             return string.IsNullOrEmpty(@string);
         }
-
-        public static string TrimEndNewLine(this string @string)
-        {
-            return @string.IsNullOrEmpty() ? @string : @string.TrimEnd(Environment.NewLine.ToCharArray());
-        }
     }
 }
