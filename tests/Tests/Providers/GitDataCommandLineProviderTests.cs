@@ -11,8 +11,9 @@ namespace Tests.Providers;
 
 public class GitDataCommandLineProviderTests
 {
+    private const string Separator = "-|::|-";
     private readonly Fixture _fixture = new();
-    
+
     private GitDataCommandLineProvider _sut; 
     private Mock<ILogger> _loggerMock;
     private Mock<CommandLineHelper> _commandLineHelperMock;
@@ -173,12 +174,11 @@ public class GitDataCommandLineProviderTests
     public void WhenIGetHead_ThenItReturnsTheCommandOutputInformation()
     {
         // Arrange
-        const char separator = '\n';
         var expected = _fixture.Create<Head>();
 
         var output =
-            $"{expected.Id}{separator}{expected.AuthorName}{separator}{expected.AuthorEmail}" +
-            $"{separator}{expected.CommitterName}{separator}{expected.CommitterEmail}{separator}" +
+            $"{expected.Id}{Separator}{expected.AuthorName}{Separator}{expected.AuthorEmail}" +
+            $"{Separator}{expected.CommitterName}{Separator}{expected.CommitterEmail}{Separator}" +
             $"{expected.Message}";
         
         _commandLineHelperMock
@@ -196,7 +196,6 @@ public class GitDataCommandLineProviderTests
     public void WhenIGetHead_WithMissingInformation_ThenItDoesNotThrow()
     {
         // Arrange
-        const char separator = '\n';
         var expected = _fixture.Build<Head>()
             .With(head => head.Message, string.Empty)
             .With(head => head.CommitterName, string.Empty)
@@ -204,8 +203,8 @@ public class GitDataCommandLineProviderTests
             .Create();
 
         var output =
-            $"{expected.Id}{separator}{expected.AuthorName}{separator}{expected.AuthorEmail}" +
-            $"{separator}{expected.CommitterName}{separator}{expected.CommitterEmail}{separator}" +
+            $"{expected.Id}{Separator}{expected.AuthorName}{Separator}{expected.AuthorEmail}" +
+            $"{Separator}{expected.CommitterName}{Separator}{expected.CommitterEmail}{Separator}" +
             $"{expected.Message}";
         
         _commandLineHelperMock
@@ -226,6 +225,10 @@ public class GitDataCommandLineProviderTests
         // Arrange
         const string commitSha = "commit";
         var output = string.Empty;
+
+        _commandLineHelperMock
+            .Setup(helper => helper.TryRun(It.IsAny<string>(), out output))
+            .Returns(true);
 
         // Act
         var actual = _sut.Load(commitSha);

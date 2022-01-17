@@ -18,7 +18,7 @@ jobs:
       - name: Setup dotCover
         run: dotnet tool install JetBrains.dotCover.GlobalTool -g
       - name: Setup coveralls-uploader
-        run: dotnet tool install --global coveralls-uploader --version 0.6.0
+        run: dotnet tool install --global coveralls-uploader --version 0.6.3
       - name: Run dotCover coverage
         run: dotnet dotcover test --dcXML="dotcover.xml"
       - name: Conver to lcov format
@@ -34,6 +34,6 @@ jobs:
           path: coverage/lcov.info
       - name: Set pull request number
         if: github.event_name == 'pull_request'
-        run: echo "COVERALLS_PULL_REQUEST_NUMBER=${{github.event.number}}" >> $GITHUB_ENV
+        run: echo "COVERALLS_PULL_REQUEST_NUMBER=${{github.event.number}}" >> $env:GITHUB_ENV
       - name: Upload data to coveralls.io
         run: coveralls-uploader -i coverage/lcov.info -v
