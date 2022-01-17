@@ -1,3 +1,4 @@
+using System;
 using AutoFixture;
 using coveralls_uploader.Utilities;
 using NUnit.Framework;
@@ -45,5 +46,33 @@ public class StringExtensionsTests
 
         // Assert
         Assert.IsFalse(actual);
+    }
+    
+    [Test]
+    public void WhenITrimEndNewLine_ThenItTrimsTheTrailingNewLineCharacters()
+    {
+        // Arrange
+        const string expected = "test";
+        var test = expected + Environment.NewLine + Environment.NewLine;
+
+        // Act
+        var actual = test.TrimEndNewLine();
+
+        // Assert
+        Assert.AreEqual(expected, actual);
+    }
+    
+    [Test]
+    public void WhenITrimEndNewLine_OnNull_ThenNull()
+    {
+        // Arrange
+        const string expected = null;
+        string test = null;
+
+        // Act
+        var actual = test.TrimEndNewLine();
+
+        // Assert
+        Assert.AreEqual(expected, actual);
     }
 }

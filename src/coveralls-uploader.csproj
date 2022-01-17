@@ -9,7 +9,7 @@
         <PackAsTool>true</PackAsTool>
         <PackageOutputPath>./nupkg</PackageOutputPath>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>0.5.7</PackageVersion>
+        <PackageVersion>0.6.3</PackageVersion>
         <Authors>sebastieng84</Authors>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/sebastieng84/coveralls-uploader</RepositoryUrl>

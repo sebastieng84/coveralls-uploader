@@ -35,7 +35,7 @@ namespace coveralls_uploader.Services
             string fileContent = null;
             string md5Hash = null;
 
-            var filePath = GetRelativeFilePath(fileCoverage.FilePath);
+            var filePath = UnixifyFilePath(GetRelativeFilePath(fileCoverage.FilePath));
             try
             {
                 fileContent = commandOptions.Source
@@ -69,6 +69,11 @@ namespace coveralls_uploader.Services
             var currentDirectory = _fileSystem.Directory.GetCurrentDirectory();
 
             return _fileSystem.Path.GetRelativePath(currentDirectory, filePath);
+        }
+
+        private string UnixifyFilePath(string filePath)
+        {
+            return filePath.Replace("\\","/");
         }
     }
 }

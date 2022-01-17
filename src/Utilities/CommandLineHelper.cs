@@ -92,7 +92,7 @@ namespace coveralls_uploader.Utilities
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                return ("-c", "cmd.exe");
+                return ("/c", "cmd.exe");
             }
 
             throw new PlatformNotSupportedException();
