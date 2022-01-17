@@ -34,6 +34,6 @@ jobs:
           path: coverage/lcov.info
       - name: Set pull request number
         if: github.event_name == 'pull_request'
-        run: echo "COVERALLS_PULL_REQUEST_NUMBER=${{github.event.number}}" >> $env:GITHUB_ENV
+        run: echo "COVERALLS_PULL_REQUEST_NUMBER=${{github.event.number}}" >> $GITHUB_ENV
       - name: Upload data to coveralls.io
         run: coveralls-uploader -i coverage/lcov.info -v
