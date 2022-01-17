@@ -41,7 +41,8 @@ namespace coveralls_uploader.Providers
         {
             const char separator = '\n';
             var gitShowCommand =
-                $"git show -q --pretty=\"\"\"%H{separator}%an{separator}%ae{separator}%cn{separator}%ce{separator}%s\"\"\" {commitSha}";
+                $"git show -q --pretty=\"\"\"%H{separator}%an{separator}%ae{separator}%cn" +
+                $"{separator}%ce{separator}%s\"\"\" {commitSha}";
 
             if (!_commandLineHelper.TryRun(gitShowCommand, out var commandOutput))
             {
@@ -67,7 +68,7 @@ namespace coveralls_uploader.Providers
             IList<Remote> remotes = new List<Remote>();
 
             const string gitRemoteCommand = "git remote -v";
-            const string remotePattern = @"(?m)^(\w+)\s+(.*)\s+\(push\)";
+            const string remotePattern = @"(?m)^([^\s]+)\s+([^\s]+)\s+\(push\)";
 
             if (!_commandLineHelper.TryRun(gitRemoteCommand, out var commandOutput))
             {

@@ -42,7 +42,7 @@ public class JenkinsJobProviderTests
             "GIT_COMMITTER_EMAIL",
             "GIT_COMMITTER_NAME",
             "GIT_BRANCH", 
-            "COVERALLS_PULL_REQUEST_NUMBER"
+            "CHANGE_ID"
         };
 
         foreach (var environmentVariable in environmentVariables)
@@ -60,7 +60,7 @@ public class JenkinsJobProviderTests
         {
             Assert.AreEqual("COVERALLS_TOKEN_VALUE", job.RepositoryToken);
             Assert.AreEqual("BUILD_NUMBER_VALUE", job.ServiceNumber);
-            Assert.AreEqual("COVERALLS_PULL_REQUEST_NUMBER_VALUE", job.ServicePullRequest);
+            Assert.AreEqual("CHANGE_ID_VALUE", job.ServicePullRequest);
             Assert.AreEqual("GIT_COMMIT_VALUE", job.CommitSha);
             Assert.AreEqual("GIT_COMMIT_VALUE", job.Git.Head.Id);
             Assert.AreEqual("GIT_AUTHOR_EMAIL_VALUE", job.Git.Head.AuthorEmail);
@@ -72,7 +72,7 @@ public class JenkinsJobProviderTests
     }
 
     [Test]
-    public void WhenILoad_AndEnvironmentVariablesAreNotSet_TheItReturnsNullValues()
+    public void WhenILoad_AndEnvironmentVariablesAreNotSet_ThenItReturnsNullValues()
     {
         // Arrange
         // Act
@@ -98,7 +98,7 @@ public class JenkinsJobProviderTests
     
     [TestCase("origin/dev", "dev")]
     [TestCase("origin/dev/tests", "dev/tests")]
-    public void WhenILoad_AndGitBranchIsARemoteBranch_TheItReturnsTheLocalBranch(
+    public void WhenILoad_AndGitBranchIsARemoteBranch_ThenItReturnsTheLocalBranch(
         string branch, 
         string expectedBranch)
     {
@@ -112,5 +112,68 @@ public class JenkinsJobProviderTests
         
         // Assert
         Assert.AreEqual(expectedBranch, job.Git.Branch);
+    }
+    
+    [Test]
+    public void WhenILoad_AndVariableGitBranchIsNull_ThenItReturnsChangeBranch()
+    {
+        // Arrange
+        const string expected = "branch";
+        
+        _environmentWrapperMock
+            .Setup(wrapper => wrapper.GetEnvironmentVariable("GIT_BRANCH"))
+            .Returns((string) null);
+        _environmentWrapperMock
+            .Setup(wrapper => wrapper.GetEnvironmentVariable("CHANGE_BRANCH"))
+            .Returns(expected);
+        
+        // Act
+        var job = _sut.Load();
+        
+        // Assert
+        Assert.AreEqual(expected, job.Git.Branch);
+    }
+    
+    [Test]
+    public void WhenILoad_AndVariablesGitBranchAndChangeBranchAreNull_ThenItReturnsBranchNameAsBranch()
+    {
+        // Arrange
+        const string expected = "branch";
+        
+        _environmentWrapperMock
+            .Setup(wrapper => wrapper.GetEnvironmentVariable("GIT_BRANCH"))
+            .Returns((string) null);
+        _environmentWrapperMock
+            .Setup(wrapper => wrapper.GetEnvironmentVariable("CHANGE_BRANCH"))
+            .Returns((string) null);
+        _environmentWrapperMock
+            .Setup(wrapper => wrapper.GetEnvironmentVariable("BRANCH_NAME"))
+            .Returns(expected);
+        
+        // Act
+        var job = _sut.Load();
+        
+        // Assert
+        Assert.AreEqual(expected, job.Git.Branch);
+    }
+    
+    [Test]
+    public void WhenILoad_AndVariableChangeIdIsNull_ThenItReturnsGhprbPullIdAsServicePullRequest()
+    {
+        // Arrange
+        const string expected = "pull_request";
+        
+        _environmentWrapperMock
+            .Setup(wrapper => wrapper.GetEnvironmentVariable("CHANGE_ID"))
+            .Returns((string) null);
+        _environmentWrapperMock
+            .Setup(wrapper => wrapper.GetEnvironmentVariable("ghprbPullId"))
+            .Returns(expected);
+        
+        // Act
+        var job = _sut.Load();
+        
+        // Assert
+        Assert.AreEqual(expected, job.ServicePullRequest);
     }
 }
