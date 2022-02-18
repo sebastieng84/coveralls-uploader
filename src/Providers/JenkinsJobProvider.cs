@@ -1,9 +1,7 @@
 #nullable enable
 using System.Text.RegularExpressions;
 using coveralls_uploader.Models.Coveralls;
-using coveralls_uploader.Utilities;
 using coveralls_uploader.Utilities.Wrappers;
-using RestSharp.Extensions;
 
 namespace coveralls_uploader.Providers
 {
@@ -28,7 +26,7 @@ namespace coveralls_uploader.Providers
             {
                 RepositoryToken = _environment.GetEnvironmentVariable("COVERALLS_TOKEN"),
                 ServiceName = ServiceName,
-                ServiceNumber = _environment.GetEnvironmentVariable("BUILD_NUMBER"),
+                ServiceJobId =_environment.GetEnvironmentVariable("BUILD_NUMBER"),
                 CommitSha = _environment.GetEnvironmentVariable("GIT_COMMIT"),
                 ServicePullRequest = GetPullRequest(),
                 Git = new Git
@@ -50,8 +48,8 @@ namespace coveralls_uploader.Providers
 
         private string? GetBranch()
         {
-            var branch = _environment.GetEnvironmentVariable("GIT_BRANCH") ??
-                         _environment.GetEnvironmentVariable("CHANGE_BRANCH") ??
+            var branch = _environment.GetEnvironmentVariable("CHANGE_BRANCH") ??
+                         _environment.GetEnvironmentVariable("GIT_BRANCH") ??
                          _environment.GetEnvironmentVariable("BRANCH_NAME");
 
             const string branchPattern = "^origin/";

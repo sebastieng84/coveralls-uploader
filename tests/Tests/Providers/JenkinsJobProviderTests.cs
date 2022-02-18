@@ -59,7 +59,7 @@ public class JenkinsJobProviderTests
         Assert.Multiple(() =>
         {
             Assert.AreEqual("COVERALLS_TOKEN_VALUE", job.RepositoryToken);
-            Assert.AreEqual("BUILD_NUMBER_VALUE", job.ServiceNumber);
+            Assert.AreEqual("BUILD_NUMBER_VALUE", job.ServiceJobId);
             Assert.AreEqual("CHANGE_ID_VALUE", job.ServicePullRequest);
             Assert.AreEqual("GIT_COMMIT_VALUE", job.CommitSha);
             Assert.AreEqual("GIT_COMMIT_VALUE", job.Git.Head.Id);
