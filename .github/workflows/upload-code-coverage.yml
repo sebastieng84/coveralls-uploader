@@ -18,7 +18,7 @@ jobs:
       - name: Setup dotCover
         run: dotnet tool install JetBrains.dotCover.GlobalTool -g
       - name: Setup coveralls-uploader
-        run: dotnet tool install --global coveralls-uploader --version 0.6.6
+        run: dotnet tool install --global coveralls-uploader --version 0.6.7
       - name: Run dotCover coverage
         run: dotnet dotcover test --dcXML="dotcover.xml"
       - name: Conver to lcov format
